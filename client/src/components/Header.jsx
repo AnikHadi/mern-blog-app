@@ -45,7 +45,7 @@ export default function Header() {
                 key={nav.name}
                 to={nav.path}
                 className={`ml-4 px-2 py-1 rounded-md ${
-                  nav.path === path ? "text-white bg-cyan-600" : ""
+                  nav.path === path ? "text-cyan-700" : ""
                 }`}
               >
                 {nav.name}
