@@ -78,9 +78,14 @@ app.delete("/api/posts/:id", (req, res) => {
 
 // Middleware to log requests
 
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url} - ${new Date().toISOString()}`);
-  next();
-});
-
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message,
+  });
+});
