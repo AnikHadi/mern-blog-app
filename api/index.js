@@ -2,6 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
+import api from "./routes/index.js";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -10,7 +11,6 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to Mongodb DataBase
-
 function connectMongoDB() {
   try {
     const url = process.env.MONGO_URL;
@@ -24,14 +24,7 @@ function connectMongoDB() {
 }
 connectMongoDB();
 
-// All routes should import here
-import authRoutes from "./routes/auth.route.js";
-import userRoutes from "./routes/user.route.js";
-
-app.use("/user", userRoutes);
-app.use("/auth", authRoutes);
-
-// Get all posts
+app.use("/api", api);
 
 app.get("/", (req, res) => {
   res.json({
@@ -42,39 +35,39 @@ app.get("/", (req, res) => {
 
 // Update an existing post
 
-app.put("/api/posts/:id", (req, res) => {
-  const post = posts.find((p) => p.id === parseInt(req.params.id));
+// app.put("/api/posts/:id", (req, res) => {
+//   const post = posts.find((p) => p.id === parseInt(req.params.id));
 
-  if (!post) {
-    return res.status(404).json({ message: "Post not found" });
-  }
+//   if (!post) {
+//     return res.status(404).json({ message: "Post not found" });
+//   }
 
-  const { title, content } = req.body;
+//   const { title, content } = req.body;
 
-  if (!title || !content) {
-    return res.status(400).json({ message: "Title and content are required" });
-  }
+//   if (!title || !content) {
+//     return res.status(400).json({ message: "Title and content are required" });
+//   }
 
-  post.title = title;
-  post.content = content;
-  post.updatedAt = new Date();
+//   post.title = title;
+//   post.content = content;
+//   post.updatedAt = new Date();
 
-  res.json(post);
-});
+//   res.json(post);
+// });
 
-// Delete a post
+// // Delete a post
 
-app.delete("/api/posts/:id", (req, res) => {
-  const postIndex = posts.findIndex((p) => p.id === parseInt(req.params.id));
+// app.delete("/api/posts/:id", (req, res) => {
+//   const postIndex = posts.findIndex((p) => p.id === parseInt(req.params.id));
 
-  if (postIndex === -1) {
-    return res.status(404).json({ message: "Post not found" });
-  }
+//   if (postIndex === -1) {
+//     return res.status(404).json({ message: "Post not found" });
+//   }
 
-  posts.splice(postIndex, 1);
+//   posts.splice(postIndex, 1);
 
-  res.json({ message: "Post deleted successfully" });
-});
+//   res.json({ message: "Post deleted successfully" });
+// });
 
 // Middleware to log requests
 
