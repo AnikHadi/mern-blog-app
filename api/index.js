@@ -22,66 +22,12 @@ function connectMongoDB() {
     console.log(err);
   }
 }
-
 connectMongoDB();
-
-// Mock data
-
-const posts = [
-  {
-    id: 1,
-    title: "First Post",
-    content: "This is the first blog post.",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: 2,
-    title: "Second Post",
-    content: "This is the second blog post.",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-];
 
 // Get all posts
 
 app.get("/", (req, res) => {
   res.json("Blog Server is running on port " + PORT);
-});
-
-// Get single post by ID
-
-app.get("/api/posts/:id", (req, res) => {
-  const post = posts.find((p) => p.id === parseInt(req.params.id));
-
-  if (!post) {
-    return res.status(404).json({ message: "Post not found" });
-  }
-
-  res.json(post);
-});
-
-// Create a new post
-
-app.post("/api/posts", (req, res) => {
-  const { title, content } = req.body;
-
-  if (!title || !content) {
-    return res.status(400).json({ message: "Title and content are required" });
-  }
-
-  const newPost = {
-    id: Date.now(),
-    title,
-    content,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-
-  posts.push(newPost);
-
-  res.status(201).json(newPost);
 });
 
 // Update an existing post
