@@ -4,7 +4,7 @@ import express from "express";
 import mongoose from "mongoose";
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(express.json());
@@ -24,10 +24,20 @@ function connectMongoDB() {
 }
 connectMongoDB();
 
+// All routes should import here
+import authRoutes from "./routes/auth.route.js";
+import userRoutes from "./routes/user.route.js";
+
+app.use("/user", userRoutes);
+app.use("/auth", authRoutes);
+
 // Get all posts
 
 app.get("/", (req, res) => {
-  res.json("Blog Server is running on port " + PORT);
+  res.json({
+    message: "Hello, API is running...",
+    port: "Blog Server is running on port " + PORT,
+  });
 });
 
 // Update an existing post
