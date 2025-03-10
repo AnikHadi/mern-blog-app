@@ -1,3 +1,4 @@
+import Spin from "@/components/share/Spin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -94,8 +95,9 @@ function SignUp() {
             <Button
               className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white cursor-pointer select-none"
               type="submit"
+              disabled={isPending}
             >
-              {isPending ? "Creating..." : "Sign Up"}
+              {isPending && <Spin />} {isPending ? "Creating..." : "Sign Up"}
             </Button>
           </form>
           <div className="flex gap-2 text-sm mt-3">

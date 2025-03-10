@@ -85,7 +85,7 @@ function SignIn() {
               className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white cursor-pointer select-none"
               type="submit"
             >
-              {isPending ? "Login..." : "Sign In"}
+              {isPending && <Spin />} {isPending ? "Login..." : "Sign In"}
             </Button>
           </form>
           <div className="flex gap-2 text-sm mt-3">
