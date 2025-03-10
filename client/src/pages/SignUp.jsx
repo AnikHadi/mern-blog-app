@@ -50,7 +50,7 @@ function SignUp() {
         <div className="flex-1 px-5 py-5 shadow-2xl rounded-xl">
           <h1 className="text-3xl font-bold text-center mb-5">Sign Up</h1>
           <form action={formAction} className="flex flex-col gap-4">
-            <div className="grid w-full max-w-sm items-center gap-1.5">
+            <div className="grid w-full md:max-w-sm items-center gap-1.5">
               <Label htmlFor="username">Your Username</Label>
               <Input
                 type="text"
@@ -59,7 +59,7 @@ function SignUp() {
                 placeholder="Username"
               />
             </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5">
+            <div className="grid w-full md:max-w-sm items-center gap-1.5">
               <Label htmlFor="email">Your Email</Label>
               <Input
                 type="email"
@@ -68,7 +68,7 @@ function SignUp() {
                 placeholder="example@domain.com"
               />
             </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5">
+            <div className="grid w-full md:max-w-sm items-center gap-1.5">
               <Label htmlFor="password">Your Password</Label>
               <div className="relative flex items-center">
                 <Input
