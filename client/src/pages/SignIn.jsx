@@ -1,31 +1,26 @@
+import PasswordInput from "@/components/share/PasswordInput";
+import Spin from "@/components/share/Spin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signin } from "@/utils/signinAction";
-import { Eye, EyeOff } from "lucide-react";
-import { useActionState, useState } from "react";
+import { signin } from "@/utils/action/authAction";
+import { useActionState } from "react";
 import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
-const emptyUser = {
-  username: "",
-  email: "",
-  password: "",
-};
-
-function SignIn() {
-  const [passText, setPassText] = useState(false);
-  const [formState, formAction, isPending] = useActionState(signin, emptyUser);
+export default function SignIn() {
+  const [state, formAction, isPending] = useActionState(signin, {});
   const navigate = useNavigate();
+  console.log(state);
 
-  if ("success" in formState) {
-    if (formState?.success) {
-      toast.success(formState.message);
+  if ("success" in state) {
+    if (state?.success) {
+      toast.success(state.message);
       navigate("/dashboard");
-      delete formState.success;
-    } else if (!formState?.success) {
-      toast.error(formState.message || "Something went wrong!");
-      delete formState.success;
+      delete state.success;
+    } else {
+      toast.error(state?.message || "Something went wrong!");
+      delete state?.success;
     }
   }
   return (
@@ -40,7 +35,7 @@ function SignIn() {
             Blog
           </Link>
           <p className="text-sm mt-5">
-            This is a demo projects. You can sign up with your email and
+            This is a demo projects. You can sign in with your email and
             password or with Google account.
           </p>
         </div>
@@ -57,30 +52,7 @@ function SignIn() {
                 placeholder="example@domain.com"
               />
             </div>
-            <div className="grid w-full md:max-w-sm items-center gap-1.5">
-              <Label htmlFor="password">Your Password</Label>
-              <div className="relative flex items-center">
-                <Input
-                  type={passText ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  placeholder="Password"
-                />
-                <span
-                  className="absolute right-3 opacity-50 hover:opacity-70 cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    return setPassText((prev) => !prev);
-                  }}
-                >
-                  {passText ? (
-                    <EyeOff color="#808080" />
-                  ) : (
-                    <Eye color="#808080" />
-                  )}
-                </span>
-              </div>
-            </div>
+            <PasswordInput inputName="password" />
             <Button
               className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white cursor-pointer select-none"
               type="submit"
@@ -99,5 +71,3 @@ function SignIn() {
     </div>
   );
 }
-
-export default SignIn;
