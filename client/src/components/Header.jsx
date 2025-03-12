@@ -1,11 +1,22 @@
 import { Logs, Moon, Search } from "lucide-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router";
 import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 import { Input } from "./ui/input";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { currentUser } = useSelector((state) => state.user);
   const path = useLocation().pathname;
   const link = [
     { name: "Home", path: "/" },
@@ -14,6 +25,7 @@ export default function Header() {
     // { name: "Contact", path: "/contact" },
     // { name: "Dashboard", path: "/dashboard" },
   ];
+
   return (
     <>
       <div className="flex items-center justify-between px-4 py-2 border-b-2">
@@ -72,9 +84,42 @@ export default function Header() {
                 absoluteStrokeWidth
               />
             </Button>
-            <Link to="/sign-in">
-              <Button className="ml-2 cursor-pointer">Sign In</Button>
-            </Link>
+            {currentUser?.email ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div className="w-10 mx-3 cursor-pointer select-none rounded-full">
+                    <img
+                      src="https://lh3.googleusercontent.com/a/ACg8ocJnzVgd0EZvM3vJc98cn-Qurzip_8bwfBQtocSQAGj6s5TRKaQV=s96-c"
+                      alt="user"
+                      className="rounded-full select-none"
+                    />
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-52">
+                  <DropdownMenuLabel>Show Profile</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuItem>{currentUser.username}</DropdownMenuItem>
+                  <DropdownMenuItem>{currentUser.email}</DropdownMenuItem>
+                  {/* <DropdownMenuItem disabled>API</DropdownMenuItem> */}
+                  <Link to="/dashboard?tab=profile">
+                    <DropdownMenuItem className="cursor-pointer">
+                      Profile
+                    </DropdownMenuItem>
+                  </Link>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="cursor-pointer">
+                    Log out
+                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link to="/sign-in">
+                <Button className="ml-2 cursor-pointer">Sign In</Button>
+              </Link>
+            )}
+
             <Button
               className="sm:hidden bg-gray-200 hover:bg-gray-300"
               onClick={() => setMenuOpen((prev) => !prev)}
