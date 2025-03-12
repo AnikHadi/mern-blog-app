@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "./App.css";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import PrivateRoute from "./components/PrivateRoute";
 import About from "./pages/About";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
@@ -20,7 +21,9 @@ function App() {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/project" element={<Projects />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
       </Routes>
       <ToastContainer />
       <Footer />
