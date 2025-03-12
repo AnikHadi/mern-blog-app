@@ -1,5 +1,11 @@
 import { Separator } from "@radix-ui/react-separator";
-import { Facebook, Github, Instagram, Linkedin, Twitter } from "lucide-react";
+import {
+  FaFacebook,
+  FaGithub,
+  FaInstagram,
+  FaLinkedin,
+  FaTwitter,
+} from "react-icons/fa";
 import { Link } from "react-router";
 
 export default function Footer() {
@@ -96,20 +102,20 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Hadi's Blog. All rights reserved.
           </p>
           <div className="flex gap-4 md:gap-6">
-            <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
-              <Facebook color="#1877F2" />
+            <Link to="/" className=" text-gray-500 hover:text-gray-700">
+              <FaFacebook color="#1877F2" className="text-2xl" />
             </Link>
             <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
-              <Twitter color="#1DA1F2" />
+              <FaTwitter color="#1DA1F2" className="text-2xl" />
+            </Link>
+            <Link to="/" className=" text-gray-500 hover:text-gray-700">
+              <FaGithub className="text-2xl text-gray-950 dark:text-gray-100" />
             </Link>
             <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
-              <Github color="#000000" />
+              <FaInstagram color="#5B51D8" className="text-2xl " />
             </Link>
             <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
-              <Instagram color="#5B51D8" />
-            </Link>
-            <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
-              <Linkedin color="#0077B5" />
+              <FaLinkedin color="#0077B5" className="text-2xl" />
             </Link>
           </div>
         </div>

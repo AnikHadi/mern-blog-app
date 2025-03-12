@@ -1,6 +1,10 @@
-import { Logs, Moon, Search } from "lucide-react";
+import { toggleTheme } from "@/redux/theme/themeSlice";
+import { Search } from "lucide-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { BsCloudMoonFill, BsMenuButtonWideFill } from "react-icons/bs";
+import { IoMdSearch } from "react-icons/io";
+import { LuCloudSun } from "react-icons/lu";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router";
 import { Button } from "./ui/button";
 import {
@@ -17,7 +21,10 @@ import { Input } from "./ui/input";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
+  const { theme } = useSelector((state) => state.theme);
+  const dispatch = useDispatch();
   const path = useLocation().pathname;
+
   const link = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
@@ -39,7 +46,7 @@ export default function Header() {
           Blog
         </Link>
         <form>
-          <div className="relative  items-center hidden lg:flex">
+          <div className="relative items-center hidden lg:flex">
             <Input type="text" placeholder="Search..." />
             <Search
               size={16}
@@ -65,24 +72,23 @@ export default function Header() {
             );
           })}
         </div>
-        <div className="flex items-center">
-          <Button className="bg-gray-300 lg:hidden rounded-full">
-            <Search
-              size={18}
-              color="#808080"
-              strokeWidth={1}
-              absoluteStrokeWidth
-              className="opacity-50 hover:opacity-70 cursor-pointer"
+        <div className="flex items-center gap-2">
+          <Button className="border-2 border-gray-400 bg-transparent hover:bg-transparent rounded-full cursor-pointer w-12 hidden sm:flex items-center">
+            <IoMdSearch
+              size={30}
+              className="text-gray-800 dark:text-gray-200"
             />
           </Button>
           <div className="flex gap-2 md:order-2">
-            <Button className="bg-gray-300 hidden sm:inline hover:bg-gray-400 rounded-full">
-              <Moon
-                size={20}
-                color="#808080"
-                strokeWidth={1}
-                absoluteStrokeWidth
-              />
+            <Button
+              className="border-2 border-gray-400 bg-transparent hover:bg-transparent rounded-full cursor-pointer w-12 hidden sm:flex items-center "
+              onClick={() => dispatch(toggleTheme())}
+            >
+              {theme === "light" ? (
+                <LuCloudSun className="text-gray-800 " />
+              ) : (
+                <BsCloudMoonFill className="text-gray-200" />
+              )}
             </Button>
             {currentUser?.email ? (
               <DropdownMenu>
@@ -116,15 +122,18 @@ export default function Header() {
               </DropdownMenu>
             ) : (
               <Link to="/sign-in">
-                <Button className="ml-2 cursor-pointer">Sign In</Button>
+                <Button className="ml-2 border-2 border-gray-400 bg-transparent hover:bg-transparent cursor-pointer text-gray-800 dark:text-gray-200 ">
+                  Sign In
+                </Button>
               </Link>
             )}
 
             <Button
-              className="sm:hidden bg-gray-200 hover:bg-gray-300"
+              // className=" bg-gray-200 hover:bg-gray-300"
+              className="sm:hidden border-2 border-gray-400 bg-transparent hover:bg-transparent cursor-pointer text-gray-800 dark:text-gray-200"
               onClick={() => setMenuOpen((prev) => !prev)}
             >
-              <Logs color="#808080" absoluteStrokeWidth />
+              <BsMenuButtonWideFill />
             </Button>
           </div>
         </div>
