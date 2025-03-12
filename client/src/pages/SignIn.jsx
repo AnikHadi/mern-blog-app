@@ -1,3 +1,4 @@
+import OAuth from "@/components/share/OAuth";
 import PasswordInput from "@/components/share/PasswordInput";
 import Spin from "@/components/share/Spin";
 import { Button } from "@/components/ui/button";
@@ -60,12 +61,13 @@ export default function SignIn() {
             <PasswordInput inputName="password" />
             <Button
               disabled={isPending}
-              className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white cursor-pointer select-none"
+              className="px-2 py-1 border-2 border-indigo-500 bg-white text-gray-900 transition delay-100 duration-300 ease-in-out hover:bg-gradient-to-r hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 hover:text-white rounded-lg  cursor-pointer select-none"
               type="submit"
             >
               {isPending && <Spin />} {isPending ? "Login..." : "Sign In"}
             </Button>
           </form>
+          <OAuth />
           <div className="flex gap-2 text-sm mt-3">
             <span>You didn't have any account?</span>
             <Link to="/sign-up" className="ml-2 text-blue-500">

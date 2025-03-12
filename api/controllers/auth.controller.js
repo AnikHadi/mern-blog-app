@@ -75,3 +75,50 @@ export const signin = async (req, res, next) => {
     next(error);
   }
 };
+
+export const google = async (req, res, next) => {
+  const { name, email, avatar } = req.body;
+
+  const filter = { email: email };
+
+  try {
+    const isValidUser = await User.findOne(filter).select({ __v: 0 });
+
+    if (!isValidUser) {
+      const hashPassword = bcryptjs.hashSync(email, 10);
+      const newUser = new User({
+        username:
+          name.toLowerCase().split(" ").join("") +
+          Math.random().toString(36).slice(-4),
+        email,
+        password: hashPassword,
+        avatar,
+      });
+      await newUser.save();
+      const { password, ...rest } = newUser._doc;
+      const token = jwt.sign({ userId: newUser._id }, process.env.JWT_TOKEN);
+      res.status(200).cookie("access_token", token, { httpOnly: true }).json({
+        user: rest,
+        success: true,
+        statusCode: 200,
+        message: "Login Successful",
+      });
+    } else {
+      const { password, ...rest } = isValidUser._doc;
+
+      const token = jwt.sign(
+        { userId: isValidUser._id },
+        process.env.JWT_TOKEN
+      );
+
+      res.status(200).cookie("access_token", token, { httpOnly: true }).json({
+        user: rest,
+        success: true,
+        statusCode: 200,
+        message: "Login Successful",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
