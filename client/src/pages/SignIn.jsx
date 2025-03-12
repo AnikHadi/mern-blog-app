@@ -3,26 +3,31 @@ import Spin from "@/components/share/Spin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signInFailure, signInSuccess } from "@/redux/user/userSlice";
 import { signin } from "@/utils/action/authAction";
 import { useActionState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 export default function SignIn() {
   const [state, formAction, isPending] = useActionState(signin, {});
   const navigate = useNavigate();
-  console.log(state);
+  const dispatch = useDispatch();
 
   if ("success" in state) {
     if (state?.success) {
-      toast.success(state.message);
+      dispatch(signInSuccess(state));
+      toast.success(state?.message);
       navigate("/dashboard");
       delete state.success;
     } else {
+      dispatch(signInFailure(state));
       toast.error(state?.message || "Something went wrong!");
       delete state?.success;
     }
   }
+
   return (
     <div className="min-h-screen mt-20">
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
@@ -54,6 +59,7 @@ export default function SignIn() {
             </div>
             <PasswordInput inputName="password" />
             <Button
+              disabled={isPending}
               className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white cursor-pointer select-none"
               type="submit"
             >

@@ -73,7 +73,7 @@ export default function Header() {
               />
             </Button>
             <Link to="/sign-in">
-              <Button className="ml-2">Sign In</Button>
+              <Button className="ml-2 cursor-pointer">Sign In</Button>
             </Link>
             <Button
               className="sm:hidden bg-gray-200 hover:bg-gray-300"
