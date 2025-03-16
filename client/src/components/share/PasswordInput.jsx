@@ -1,18 +1,22 @@
+import { cn } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
-export default function PasswordInput({ inputName }) {
+export default function PasswordInput({ className, name, ...props }) {
   const [passText, setPassText] = useState(false);
   return (
-    <div className="grid w-full md:max-w-sm items-center gap-1.5">
-      <Label htmlFor={inputName}>Your Password</Label>
+    <div
+      className={cn("grid w-full md:max-w-sm items-center gap-1.5", className)}
+    >
+      <Label htmlFor={name}>Your Password</Label>
       <div className="relative flex items-center">
         <Input
           type={passText ? "text" : "password"}
-          id={inputName}
-          name={inputName}
+          id={name}
+          name={name}
+          {...props}
           placeholder="Password"
         />
         <span

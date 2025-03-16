@@ -68,7 +68,7 @@ function SignUp() {
                 placeholder="example@domain.com"
               />
             </div>
-            <PasswordInput inputName="password" />
+            <PasswordInput name="password" />
             <Button
               className="px-2 py-1 border-2 border-indigo-500 bg-white text-gray-900 transition delay-100 duration-300 ease-in-out hover:bg-gradient-to-r hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 hover:text-white rounded-lg  cursor-pointer select-none"
               type="submit"
