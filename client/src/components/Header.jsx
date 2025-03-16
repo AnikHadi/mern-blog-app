@@ -45,8 +45,9 @@ export default function Header() {
           </span>
           Blog
         </Link>
+
         <form>
-          <div className="relative items-center hidden lg:flex">
+          <div className="w-[160%] relative items-center hidden lg:flex">
             <Input type="text" placeholder="Search..." />
             <Search
               size={16}
@@ -73,7 +74,7 @@ export default function Header() {
           })}
         </div>
         <div className="flex items-center gap-2">
-          <Button className="border-2 border-gray-400 bg-transparent hover:bg-transparent rounded-full cursor-pointer w-12 hidden sm:flex items-center">
+          <Button className="border-2 border-gray-400 bg-transparent hover:bg-transparent rounded-full cursor-pointer w-12 flex lg:hidden items-center">
             <IoMdSearch
               size={30}
               className="text-gray-800 dark:text-gray-200"
@@ -95,7 +96,7 @@ export default function Header() {
                 <DropdownMenuTrigger asChild>
                   <div className="w-10 mx-3 cursor-pointer select-none rounded-full">
                     <img
-                      src="https://lh3.googleusercontent.com/a/ACg8ocJnzVgd0EZvM3vJc98cn-Qurzip_8bwfBQtocSQAGj6s5TRKaQV=s96-c"
+                      src={currentUser.avatar}
                       alt="user"
                       className="rounded-full select-none"
                     />
