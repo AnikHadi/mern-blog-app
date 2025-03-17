@@ -40,3 +40,33 @@ export async function signin(prevState, queryData) {
     return error;
   }
 }
+
+export async function updateProfile(prevState, queryData) {
+  const username = queryData.get("username");
+  const email = queryData.get("email");
+  const password = queryData.get("password");
+  const avatar = queryData.get("avatar");
+
+  const userInfo = {};
+  userInfo.username = username;
+  userInfo.email = email;
+  userInfo.password = password;
+  userInfo.avatar = avatar;
+  // try {
+  //   const res = await fetch("/api/auth/signin", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ email, password }),
+  //   });
+  //   return await res.json();
+  // } catch (error) {
+  //   return error;
+  // }
+  return {
+    success: true,
+    message: "Profile updated successfully",
+    data: userInfo,
+  };
+}
