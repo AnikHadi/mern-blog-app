@@ -50,23 +50,43 @@ export async function updateProfile(prevState, queryData) {
   const userInfo = {};
   userInfo.username = username;
   userInfo.email = email;
-  userInfo.password = password;
-  userInfo.avatar = avatar;
-  // try {
-  //   const res = await fetch("/api/auth/signin", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ email, password }),
-  //   });
-  //   return await res.json();
-  // } catch (error) {
-  //   return error;
-  // }
-  return {
-    success: true,
-    message: "Profile updated successfully",
-    data: userInfo,
-  };
+  if (password) {
+    userInfo.password = password;
+  }
+
+  try {
+    // Uploading profile image to cloudinary
+    if (avatar?.size > 0) {
+      async function imageUpload() {
+        const imageData = new FormData();
+        imageData.append("file", avatar);
+        imageData.append("upload_preset", "mern-blog");
+        imageData.append("cloud_name", "dmxub0wye");
+
+        const res = await fetch(
+          "https://api.cloudinary.com/v1_1/dmxub0wye/image/upload",
+          {
+            method: "POST",
+            body: imageData,
+          }
+        );
+        const data = await res.json();
+        userInfo.avatar = await data.url;
+      }
+      await imageUpload();
+    }
+
+    // Updating user profile
+    const res = await fetch(`/api/user/update/${prevState.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userInfo),
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
 }

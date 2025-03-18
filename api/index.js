@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
@@ -9,6 +10,7 @@ const PORT = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // Connect to Mongodb DataBase
 function connectMongoDB() {
