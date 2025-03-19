@@ -59,3 +59,14 @@ export async function deleteProfile(userId) {
     return error;
   }
 }
+export async function signOutAction() {
+  try {
+    const res = await fetch(`/api/user/signout`, {
+      method: "POST",
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+}

@@ -1,10 +1,14 @@
 import { toggleTheme } from "@/redux/theme/themeSlice";
 import { signOut } from "@/redux/user/userSlice";
+import { signOutAction } from "@/utils/action/userAction";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { BsCloudMoonFill, BsMenuButtonWideFill } from "react-icons/bs";
-import { IoMdSearch } from "react-icons/io";
+import { CgProfile } from "react-icons/cg";
+import { FaRegUser } from "react-icons/fa";
+import { IoMdLogOut, IoMdSearch } from "react-icons/io";
 import { LuCloudSun } from "react-icons/lu";
+import { MdOutlineAlternateEmail } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router";
 import { toast } from "react-toastify";
@@ -36,12 +40,15 @@ export default function Header() {
   ];
 
   // Sign Out Handler
-  const handleSignOut = (userId) => {
-    if (userId) {
-      toast.success("Sign out successfully.");
-      dispatch(signOut());
-    } else {
-      toast.error("Sign out Failed.");
+  const handleSignOut = async () => {
+    const result = await signOutAction();
+    if ("success" in result) {
+      if (result.success) {
+        toast.success(result.message);
+        dispatch(signOut());
+      } else {
+        toast.error("Sign out Failed.");
+      }
     }
   };
 
@@ -118,20 +125,24 @@ export default function Header() {
                   <DropdownMenuLabel>Show Profile</DropdownMenuLabel>
                   <DropdownMenuSeparator />
 
-                  <DropdownMenuItem>{currentUser.username}</DropdownMenuItem>
-                  <DropdownMenuItem>{currentUser.email}</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <FaRegUser /> {currentUser.username}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <MdOutlineAlternateEmail /> {currentUser.email}
+                  </DropdownMenuItem>
                   {/* <DropdownMenuItem disabled>API</DropdownMenuItem> */}
                   <Link to="/dashboard?tab=profile">
                     <DropdownMenuItem className="cursor-pointer">
-                      Profile
+                      <CgProfile /> Profile
                     </DropdownMenuItem>
                   </Link>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="cursor-pointer"
-                    onClick={() => handleSignOut(currentUser._id)}
+                    onClick={handleSignOut}
                   >
-                    Log out
+                    <IoMdLogOut /> Log out
                     <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                   </DropdownMenuItem>
                 </DropdownMenuContent>

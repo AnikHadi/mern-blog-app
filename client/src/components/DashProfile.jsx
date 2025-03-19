@@ -1,6 +1,6 @@
 import { signInFailure, signInSuccess, signOut } from "@/redux/user/userSlice";
 import { updateProfile } from "@/utils/action/authAction";
-import { deleteProfile } from "@/utils/action/userAction";
+import { deleteProfile, signOutAction } from "@/utils/action/userAction";
 import { useActionState, useRef, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,12 +57,15 @@ export default function DashProfile() {
   };
 
   // Sign Out Handler
-  const handleSignOut = (userId) => {
-    if (userId) {
-      toast.success("Sign out successfully.");
-      dispatch(signOut());
-    } else {
-      toast.error("Sign out Failed.");
+  const handleSignOut = async () => {
+    const result = await signOutAction();
+    if ("success" in result) {
+      if (result.success) {
+        toast.success(result.message);
+        dispatch(signOut());
+      } else {
+        toast.error("Sign out Failed.");
+      }
     }
   };
 
@@ -144,7 +147,7 @@ export default function DashProfile() {
 
         <Button
           className="cursor-pointer bg-yellow-300 text-black shadow-xs hover:bg-yellow-300/70 focus-visible:ring-yellow-300/20 dark:focus-visible:ring-yellow-300/40"
-          onClick={() => handleSignOut(currentUser._id)}
+          onClick={handleSignOut}
         >
           Sign Out
         </Button>

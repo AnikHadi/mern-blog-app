@@ -28,7 +28,7 @@ export default function ConfirmDialog({
           <Button
             type="button"
             variant="secondary"
-            className="cursor-pointer bg-amber-300/50 hover:bg-amber-300"
+            className=" cursor-pointer bg-amber-300/50 hover:bg-amber-300"
           >
             Close
           </Button>
@@ -36,7 +36,7 @@ export default function ConfirmDialog({
         <DialogClose asChild>
           <Button
             onClick={onClick}
-            className="cursor-pointer bg-red-600/70 hover:bg-red-600"
+            className=" cursor-pointer bg-red-600/70 hover:bg-red-600"
           >
             {btnName}
           </Button>
