@@ -1,4 +1,5 @@
 import { toggleTheme } from "@/redux/theme/themeSlice";
+import { signOut } from "@/redux/user/userSlice";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { BsCloudMoonFill, BsMenuButtonWideFill } from "react-icons/bs";
@@ -6,6 +7,7 @@ import { IoMdSearch } from "react-icons/io";
 import { LuCloudSun } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router";
+import { toast } from "react-toastify";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -32,6 +34,16 @@ export default function Header() {
     // { name: "Contact", path: "/contact" },
     // { name: "Dashboard", path: "/dashboard" },
   ];
+
+  // Sign Out Handler
+  const handleSignOut = (userId) => {
+    if (userId) {
+      toast.success("Sign out successfully.");
+      dispatch(signOut());
+    } else {
+      toast.error("Sign out Failed.");
+    }
+  };
 
   return (
     <>
@@ -115,7 +127,10 @@ export default function Header() {
                     </DropdownMenuItem>
                   </Link>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer">
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => handleSignOut(currentUser._id)}
+                  >
                     Log out
                     <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                   </DropdownMenuItem>

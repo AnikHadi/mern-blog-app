@@ -1,12 +1,15 @@
-import { signInFailure, signInSuccess } from "@/redux/user/userSlice";
+import { signInFailure, signInSuccess, signOut } from "@/redux/user/userSlice";
 import { updateProfile } from "@/utils/action/authAction";
+import { deleteProfile } from "@/utils/action/userAction";
 import { useActionState, useRef, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import ConfirmDialog from "./ConfirmDialog";
 import PasswordInput from "./share/PasswordInput";
 import Spin from "./share/Spin";
 import { Button } from "./ui/button";
+import { Dialog, DialogTrigger } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
@@ -15,6 +18,8 @@ export default function DashProfile() {
   const [state, formAction, isPending] = useActionState(updateProfile, {
     id: currentUser._id,
   });
+  const [delLoading, setDelLoading] = useState(false);
+
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const dispatch = useDispatch();
   const filePickerRef = useRef();
@@ -35,6 +40,31 @@ export default function DashProfile() {
       delete state?.success;
     }
   }
+
+  // Delete User Profile Handler
+  const handleDeleteProfile = async (userId) => {
+    setDelLoading(true);
+    const result = await deleteProfile(userId);
+    if ("success" in result) {
+      if (result.success) {
+        toast.success(result.message);
+        dispatch(signOut());
+      } else {
+        toast.error(result.message);
+      }
+    }
+    setDelLoading(false);
+  };
+
+  // Sign Out Handler
+  const handleSignOut = (userId) => {
+    if (userId) {
+      toast.success("Sign out successfully.");
+      dispatch(signOut());
+    } else {
+      toast.error("Sign out Failed.");
+    }
+  };
 
   return (
     <div className="max-w-lg mx-auto p-4">
@@ -95,10 +125,27 @@ export default function DashProfile() {
         </Button>
       </form>
       <div className="flex justify-between gap-2 mt-4">
-        <Button variant="destructive" className="cursor-pointer">
-          Delete Account
-        </Button>
-        <Button className="cursor-pointer bg-yellow-300 text-black shadow-xs hover:bg-yellow-300/70 focus-visible:ring-yellow-300/20 dark:focus-visible:ring-yellow-300/40">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              className="cursor-pointer bg-red-600/70 hover:bg-red-600"
+              disabled={delLoading}
+            >
+              Delete Account
+            </Button>
+          </DialogTrigger>
+          <ConfirmDialog
+            title={"Delete User"}
+            description="Are you sure you want to delete your profile?"
+            btnName="Delete User"
+            onClick={() => handleDeleteProfile(currentUser._id)}
+          />
+        </Dialog>
+
+        <Button
+          className="cursor-pointer bg-yellow-300 text-black shadow-xs hover:bg-yellow-300/70 focus-visible:ring-yellow-300/20 dark:focus-visible:ring-yellow-300/40"
+          onClick={() => handleSignOut(currentUser._id)}
+        >
           Sign Out
         </Button>
       </div>
