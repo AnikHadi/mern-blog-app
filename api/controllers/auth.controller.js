@@ -59,7 +59,7 @@ export const signin = async (req, res, next) => {
         const { password: pass, ...rest } = isValidUser._doc;
 
         const token = jwt.sign(
-          { userId: isValidUser._id },
+          { userId: isValidUser._id, isAdmin: isValidUser.isAdmin },
           process.env.JWT_TOKEN
         );
 
@@ -96,7 +96,10 @@ export const google = async (req, res, next) => {
       });
       await newUser.save();
       const { password, ...rest } = newUser._doc;
-      const token = jwt.sign({ userId: newUser._id }, process.env.JWT_TOKEN);
+      const token = jwt.sign(
+        { userId: newUser._id, isAdmin: newUser.isAdmin },
+        process.env.JWT_TOKEN
+      );
       res.status(200).cookie("access_token", token, { httpOnly: true }).json({
         user: rest,
         success: true,
@@ -107,7 +110,7 @@ export const google = async (req, res, next) => {
       const { password, ...rest } = isValidUser._doc;
 
       const token = jwt.sign(
-        { userId: isValidUser._id },
+        { userId: isValidUser._id, isAdmin: isValidUser.isAdmin },
         process.env.JWT_TOKEN
       );
 

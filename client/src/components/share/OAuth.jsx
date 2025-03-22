@@ -29,7 +29,6 @@ export default function OAuth() {
         }),
       });
       const result = await res.json();
-      console.log(result);
       if (res.ok) {
         dispatch(signInSuccess(result));
         navigate("/dashboard");

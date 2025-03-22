@@ -2,9 +2,11 @@ import DashProfile from "@/components/DashProfile";
 import DashSidebar from "@/components/DashSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 
 function Dashboard() {
+  const { currentUser } = useSelector((state) => state.user);
   const location = useLocation();
   const [tab, setTab] = useState();
   useEffect(() => {
@@ -16,7 +18,7 @@ function Dashboard() {
     <SidebarProvider>
       <div className="flex flex-row w-full">
         <div className="w-50 hidden md:block">
-          <DashSidebar searchParam={tab} />
+          <DashSidebar searchParam={tab} user={currentUser} />
         </div>
         {/* Profile */}
         <div className="flex-1 relative">

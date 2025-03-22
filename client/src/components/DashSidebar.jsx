@@ -27,7 +27,7 @@ import { toast } from "react-toastify";
 //     to: "/about",
 //   },
 // ];
-export default function DashSidebar({ searchParam }) {
+export default function DashSidebar({ searchParam, user }) {
   const dispatch = useDispatch();
   const { pathname, search } = useLocation();
   // Sign Out Handler
@@ -80,7 +80,7 @@ export default function DashSidebar({ searchParam }) {
                   <CgProfile /> Profile
                 </span>
                 <span className="text-white bg-gray-600 px-2 py-0.5 text-[10px] rounded-sm">
-                  User
+                  {user?.isAdmin ? "Admin" : "User"}
                 </span>
               </Link>
             </SidebarMenuButton>

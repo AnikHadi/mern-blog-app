@@ -4,6 +4,7 @@ import { deleteProfile, signOutAction } from "@/utils/action/userAction";
 import { useActionState, useRef, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router";
 import { toast } from "react-toastify";
 import ConfirmDialog from "./ConfirmDialog";
 import PasswordInput from "./share/PasswordInput";
@@ -127,6 +128,13 @@ export default function DashProfile() {
           {isPending && <Spin />} {isPending ? "Updating..." : "Update Profile"}
         </Button>
       </form>
+      {currentUser.isAdmin && (
+        <div className="mt-4">
+          <Link to="/create-post">
+            <Button className="w-full cursor-pointer">Create a Post</Button>
+          </Link>
+        </div>
+      )}
       <div className="flex justify-between gap-2 mt-4">
         <Dialog>
           <DialogTrigger asChild>
