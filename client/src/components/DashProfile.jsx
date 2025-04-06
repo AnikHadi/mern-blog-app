@@ -131,7 +131,12 @@ export default function DashProfile() {
       {currentUser.isAdmin && (
         <div className="mt-4">
           <Link to="/create-post">
-            <Button className="w-full cursor-pointer">Create a Post</Button>
+            <Button
+              className="w-full cursor-pointer bg-gradient-to-r from-indigo-500/80 hover:from-indigo-500  via-purple-500/80 hover:via-purple-500 to-pink-500/80 hover:to-pink-500"
+              //
+            >
+              Create a Post
+            </Button>
           </Link>
         </div>
       )}
