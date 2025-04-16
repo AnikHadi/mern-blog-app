@@ -77,6 +77,16 @@ export default function Header() {
             />
           </div>
         </form>
+        <select>
+          <option>Select Your Type</option>
+          {link.map((link) => {
+            return (
+              <option key={link.name} value={link.name}>
+                {link.name}
+              </option>
+            );
+          })}
+        </select>
         <div className="hidden sm:flex items-center">
           {link.map((nav) => {
             return (

@@ -33,3 +33,16 @@ export const createCategory = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAllCategories = async (req, res, next) => {
+  try {
+    const categories = await Category.find({}).select({ __v: 0 });
+    res.status(200).json({
+      categories,
+      success: true,
+      message: "Categories fetched successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -1,5 +1,26 @@
 "use server";
 
+export async function imageUpload(file) {
+  try {
+    const imageData = new FormData();
+    imageData.append("file", file);
+    imageData.append("upload_preset", "mern-blog");
+    imageData.append("cloud_name", "dmxub0wye");
+
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dmxub0wye/image/upload",
+      {
+        method: "POST",
+        body: imageData,
+      }
+    );
+    const data = await res.json();
+    return data.url;
+  } catch (error) {
+    return error;
+  }
+}
+
 export async function signup(prevState, queryData) {
   const username = queryData.get("username");
   const email = queryData.get("email");
@@ -57,23 +78,25 @@ export async function updateProfile(prevState, queryData) {
   try {
     // Uploading profile image to cloudinary
     if (avatar?.size > 0) {
-      async function imageUpload() {
-        const imageData = new FormData();
-        imageData.append("file", avatar);
-        imageData.append("upload_preset", "mern-blog");
-        imageData.append("cloud_name", "dmxub0wye");
+      // async function imageUpload() {
+      //   const imageData = new FormData();
+      //   imageData.append("file", avatar);
+      //   imageData.append("upload_preset", "mern-blog");
+      //   imageData.append("cloud_name", "dmxub0wye");
 
-        const res = await fetch(
-          "https://api.cloudinary.com/v1_1/dmxub0wye/image/upload",
-          {
-            method: "POST",
-            body: imageData,
-          }
-        );
-        const data = await res.json();
-        userInfo.avatar = await data.url;
-      }
-      await imageUpload();
+      //   const res = await fetch(
+      //     "https://api.cloudinary.com/v1_1/dmxub0wye/image/upload",
+      //     {
+      //       method: "POST",
+      //       body: imageData,
+      //     }
+      //   );
+      //   const data = await res.json();
+      //   userInfo.avatar = await data.url;
+      // }
+      // await imageUpload();
+      const imageUrl = await imageUpload(avatar);
+      userInfo.avatar = imageUrl;
     }
 
     // Updating user profile

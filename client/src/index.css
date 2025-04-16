@@ -122,3 +122,25 @@
     @apply bg-background text-foreground;
   }
 }
+
+h1 {
+  @apply text-[2.125rem] leading-[2.5rem] font-bold;
+}
+h2 {
+  @apply text-[1.875rem] leading-[2.25rem] font-bold;
+}
+h3 {
+  @apply text-[1.5rem] leading-[2rem] font-bold;
+}
+h4 {
+  @apply text-[1.25rem] leading-[1.75rem] font-bold;
+}
+h5 {
+  @apply text-[1.125rem] leading-[1.5rem] font-bold;
+}
+h6 {
+  @apply text-[1rem] leading-[1.25rem] font-bold;
+}
+p {
+  @apply text-[16px];
+}

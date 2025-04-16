@@ -1,3 +1,4 @@
+import Category from "../models/category.model.js";
 import Post from "../models/post.model.js";
 import { errorHandler } from "../utils/error.js";
 
@@ -15,8 +16,15 @@ export const createPost = async (req, res, next) => {
     .toLowerCase()
     .replace(/[^a-zA-Z0-9-]/g, "");
 
+  const filter = { slug: req.body.category };
+  const category = await Category.findOne(filter).select({ __v: 0 });
+  if (!category) {
+    return next(errorHandler(404, "Category not found!"));
+  }
+
   const newPost = new Post({
     ...req.body,
+    category: category._id,
     slug,
     user: req.user.userId,
   });
