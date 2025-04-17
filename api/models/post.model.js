@@ -25,7 +25,7 @@ const postSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
       required: true,
-      default: "67de83d02691fd0db88a2f2e",
+      default: "67de83d02691fd0db88a2f2e", // default category is "Uncategorized"
     },
     slug: {
       type: String,

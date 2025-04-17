@@ -19,7 +19,6 @@ export default function CreatePost() {
   const { quill, quillRef, Quill } = useQuill();
   const counterRef = useRef();
   const filePickerRef = useRef();
-  const [quillText, setQuillText] = useState("");
   const [allCategories, setAllCategories] = useState([]);
   const [imageFileUrl, setImageFileUrl] = useState(null);
 
@@ -56,13 +55,12 @@ export default function CreatePost() {
     const image = imageFileUrl;
     const content = quill.root.innerHTML;
 
-    if (!title || !category || !image || !content) {
-      toast.error("All fields are required");
+    if (!title || !content) {
+      toast.error("Title & content fields are required");
       return;
     } else {
       const data = { title, category, image, content };
       const result = await createPost(data);
-      console.log(result);
       if ("success" in result) {
         if (result.success) {
           toast.success(result.message);
@@ -90,11 +88,13 @@ export default function CreatePost() {
   return (
     <div className="min-h-screen max-w-3xl p-3 mx-auto">
       <h1 className="text-center text-3xl font-semibold my-7">CreatePost</h1>
-      <form onSubmit={formAction} className="flex flex-col gap-4">
+      <form onSubmit={formAction} className="flex flex-col gap-4 mb-8">
         <div className="flex flex-col sm:flex-row gap-4 justify-between">
           <Input
             type="text"
             name="title"
+            suggestion="title"
+            autoComplete="off"
             placeholder="Title"
             id="title"
             required
@@ -107,7 +107,7 @@ export default function CreatePost() {
             <SelectContent>
               {allCategories.map((category) => {
                 return (
-                  <SelectItem key={category._id} value={category.slug}>
+                  <SelectItem key={category._id} value={category._id}>
                     {category.name}
                   </SelectItem>
                 );
@@ -121,11 +121,27 @@ export default function CreatePost() {
             name="picture"
             type="file"
             accept="image/*"
-            // onChange={handleImageChange}
             ref={filePickerRef}
           />
-          <Button onClick={uploadImageHandler}>Upload Image</Button>
+          <Button type="button" onClick={uploadImageHandler}>
+            Upload Image
+          </Button>
         </div>
+        {imageFileUrl ? (
+          <div className="h-[250px] mb-4">
+            <div className="flex items-center justify-center h-full">
+              <img
+                src={imageFileUrl}
+                alt="Uploaded"
+                className="object-cover h-full w-full"
+              />
+            </div>
+          </div>
+        ) : (
+          <p className="text-gray-600 bg-red-300/40 px-4 py-2 rounded-md ">
+            Please select an image to upload!
+          </p>
+        )}
         <div className="h-[300px] mb-16">
           <div ref={quillRef} />
         </div>
