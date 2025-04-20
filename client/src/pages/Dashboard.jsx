@@ -1,5 +1,8 @@
+import DashComments from "@/components/DashComments";
+import DashPosts from "@/components/DashPosts";
 import DashProfile from "@/components/DashProfile";
 import DashSidebar from "@/components/DashSidebar";
+import DashUsers from "@/components/DashUsers";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -26,6 +29,9 @@ function Dashboard() {
             <SidebarTrigger />
           </div>
           {tab === "profile" && <DashProfile />}
+          {tab === "posts" && <DashPosts />}
+          {tab === "comments" && <DashComments />}
+          {tab === "users" && <DashUsers />}
         </div>
       </div>
     </SidebarProvider>

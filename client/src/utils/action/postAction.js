@@ -19,3 +19,12 @@ export async function createPost(postData) {
     return error;
   }
 }
+
+export async function getPost(page, limit, category, search) {
+  try {
+    const res = await fetch("/api/post/get-posts");
+    return await res.json();
+  } catch (error) {
+    return error;
+  }
+}
