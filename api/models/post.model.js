@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const postSchema = new mongoose.Schema(
   {
     user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
+      // ref: "User",
       required: true,
     },
     title: {
@@ -22,10 +22,9 @@ const postSchema = new mongoose.Schema(
         "https://simplybuiltsites.com/wp-content/uploads/how-to-write-a-blog-post.png",
     },
     category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
+      type: String,
       required: true,
-      default: "67de83d02691fd0db88a2f2e", // default category is "Uncategorized"
+      default: "Uncategorized",
     },
     slug: {
       type: String,

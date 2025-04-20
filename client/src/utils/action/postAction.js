@@ -3,7 +3,6 @@ export async function createPost(postData) {
     delete postData.image; // remove image property if not provided
   }
   if (!postData.category) {
-    // postData.category = "67de83d02691fd0db88a2f2e"; // default category is "Uncategorized"
     delete postData.category; // remove category property if not provided
   }
   try {
@@ -20,9 +19,11 @@ export async function createPost(postData) {
   }
 }
 
-export async function getPost(page, limit, category, search) {
+export async function getPost(userId, category, slug, postId, searchTerm) {
   try {
-    const res = await fetch("/api/post/get-posts");
+    const res = await fetch(
+      `/api/post/get-posts?userId=${userId}&category=${category}&slug=${slug}&postId=${postId}&searchTerm=${searchTerm}`
+    );
     return await res.json();
   } catch (error) {
     return error;

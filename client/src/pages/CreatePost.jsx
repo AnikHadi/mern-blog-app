@@ -107,7 +107,7 @@ export default function CreatePost() {
             <SelectContent>
               {allCategories.map((category) => {
                 return (
-                  <SelectItem key={category._id} value={category._id}>
+                  <SelectItem key={category._id} value={category.slug}>
                     {category.name}
                   </SelectItem>
                 );

@@ -1,5 +1,7 @@
+import mongoose from "mongoose";
 import Post from "../models/post.model.js";
 import { errorHandler } from "../utils/error.js";
+const ObjectId = mongoose.Types.ObjectId;
 
 export const createPost = async (req, res, next) => {
   if (!req.user.isAdmin) {
@@ -20,7 +22,6 @@ export const createPost = async (req, res, next) => {
 
   const newPost = new Post({
     ...req.body,
-    // category: category._id,
     slug,
     user: req.user.userId,
   });
@@ -39,16 +40,16 @@ export const createPost = async (req, res, next) => {
 
 export const getPosts = async (req, res, next) => {
   const { userId, category, slug, postId, searchTerm } = req.query;
-  // const skip = (page - 1) * limit;
-  const startIndex = parseInt(req.query.startIndex) || 0; // Default to 0 if not provided
-  const limit = parseInt(req.query.limit) || 9; // Default to 9 posts per page
-  const sortDirection = req.query.order === "asc" ? 1 : -1; // Default to descending order
+  const startIndex = parseInt(req.query.startIndex) || 0;
+  const limit = parseInt(req.query.limit) || 9;
+  const sortDirection = req.query.order === "asc" ? 1 : -1;
+  // const userID = new mongoose.Types.ObjectId(userId);
 
   const filter = {
-    ...(userId && { userId: userId }),
+    ...(userId && { user: userId }),
     ...(category && { category: category }),
-    ...(slug && { category: slug }),
-    ...(postId && { postId: postId }),
+    ...(slug && { slug: slug }),
+    ...(postId && { _id: postId }),
     ...(searchTerm && {
       $or: [
         { title: { $regex: searchTerm, $options: "i" } },
@@ -59,7 +60,7 @@ export const getPosts = async (req, res, next) => {
 
   try {
     const posts = await Post.find(filter)
-      .populate("user", "category")
+      .populate("user")
       .skip(startIndex)
       .limit(limit)
       .sort({ updatedAt: sortDirection });
