@@ -15,20 +15,20 @@ import { toast } from "react-toastify";
 
 export default function DashPosts() {
   const currentUser = useSelector((state) => state.user.currentUser);
-  // const counterRef = useRef();
-  const [posts, setPosts] = useState([]);
+  const [userPost, setUserPost] = useState([]);
+  const [showMore, setShowMore] = useState(true);
 
   // Fetch posts from the server when the component mounts
   useEffect(() => {
-    const userId = currentUser._id;
-    const category = "";
-    const slug = "";
-    const postId = "";
-    const searchTerm = "";
     const fetchPosts = async () => {
-      const posts = await getPost(userId, category, slug, postId, searchTerm);
+      const posts = await getPost(currentUser._id);
       if (posts.success) {
-        setPosts(posts.posts);
+        setUserPost(posts.posts);
+        if (posts.posts.length < 9) {
+          setShowMore(false);
+        } else {
+          setShowMore(true);
+        }
       } else {
         toast.error(posts.message);
       }
@@ -38,9 +38,25 @@ export default function DashPosts() {
     }
   }, [currentUser._id, currentUser.isAdmin]);
 
+  // Function to handle the "Show More" button click
+  const handleShowMore = async () => {
+    const startIndex = userPost.length;
+    const posts = await getPost(currentUser._id, startIndex);
+    if (posts.success) {
+      setUserPost((prevPosts) => [...prevPosts, ...posts.posts]);
+      if (posts.posts.length < 9) {
+        setShowMore(false);
+      } else {
+        setShowMore(true);
+      }
+    } else {
+      toast.error(posts.message);
+    }
+  };
+
   return (
     <div>
-      {currentUser.isAdmin && posts.length > 0 ? (
+      {currentUser.isAdmin && userPost.length > 0 ? (
         <div className="container mx-auto p-4">
           <h1 className="text-2xl font-bold">Your Posts</h1>
           <div className="grid grid-cols-1 gap-4 mt-4">
@@ -60,7 +76,7 @@ export default function DashPosts() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {posts.map((post) => {
+                  {userPost.map((post) => {
                     // const createdAt = new Date(
                     //   post.createdAt
                     // ).toLocaleDateString("en-US", {
@@ -115,11 +131,16 @@ export default function DashPosts() {
               </Table>
             </div>
           </div>
-          <div className="flex justify-center mt-4">
-            <button className="bg-blue-500 text-white px-4 py-1.5 rounded-lg hover:bg-blue-600 cursor-pointer">
-              Show More
-            </button>
-          </div>
+          {showMore && (
+            <div className="flex justify-center mt-4">
+              <button
+                onClick={handleShowMore}
+                className="bg-blue-500 text-white px-4 py-1.5 rounded-lg hover:bg-blue-600 cursor-pointer"
+              >
+                Show More
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center h-screen">

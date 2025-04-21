@@ -19,10 +19,19 @@ export async function createPost(postData) {
   }
 }
 
-export async function getPost(userId, category, slug, postId, searchTerm) {
+export async function getPost(
+  userId = "",
+  startIndex = 0,
+  category = "",
+  slug = "",
+  postId = "",
+  searchTerm = "",
+  order = "desc", // default order is "desc" or "asc"
+  limit = 9
+) {
   try {
     const res = await fetch(
-      `/api/post/get-posts?userId=${userId}&category=${category}&slug=${slug}&postId=${postId}&searchTerm=${searchTerm}`
+      `/api/post/get-posts?userId=${userId}&startIndex=${startIndex}&category=${category}&slug=${slug}&postId=${postId}&searchTerm=${searchTerm}&order=${order}&limit=${limit}`
     );
     return await res.json();
   } catch (error) {
