@@ -6,19 +6,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getPost } from "@/utils/action/postAction";
+import { deletePost, getPost } from "@/utils/action/postAction";
 import { useEffect, useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Link } from "react-router";
 import { toast } from "react-toastify";
+import ConfirmDialog from "./ConfirmDialog";
+import { Button } from "./ui/button";
+import { Dialog, DialogTrigger } from "./ui/dialog";
 
 export default function DashPosts() {
   const currentUser = useSelector((state) => state.user.currentUser);
   const [userPost, setUserPost] = useState([]);
   const [showMore, setShowMore] = useState(true);
+  const [delLoading, setDelLoading] = useState(false);
 
   // Fetch posts from the server when the component mounts
+
   useEffect(() => {
     const fetchPosts = async () => {
       const posts = await getPost(currentUser._id);
@@ -36,7 +41,7 @@ export default function DashPosts() {
     if (currentUser.isAdmin) {
       fetchPosts();
     }
-  }, [currentUser._id, currentUser.isAdmin]);
+  }, [currentUser]);
 
   // Function to handle the "Show More" button click
   const handleShowMore = async () => {
@@ -53,99 +58,138 @@ export default function DashPosts() {
       toast.error(posts.message);
     }
   };
+  // washing Time is 7.07.46
+
+  // Function to delete a post
+  const handleDeletePost = async (postId) => {
+    setDelLoading(true);
+    const result = await deletePost(postId, currentUser._id);
+    if ("success" in result) {
+      if (result.success) {
+        setUserPost((prevPosts) => {
+          if (prevPosts.length <= 9) {
+            setShowMore(false);
+          } else {
+            setShowMore(true);
+          }
+          return prevPosts.filter((post) => post._id !== postId);
+        });
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    }
+    setDelLoading(false);
+  };
 
   return (
     <div>
-      {currentUser.isAdmin && userPost.length > 0 ? (
-        <div className="container mx-auto p-4">
-          <h1 className="text-2xl font-bold">Your Posts</h1>
-          <div className="grid grid-cols-1 gap-4 mt-4">
-            {/*  md:grid-cols-2 lg:grid-cols-3 */}
-            <div className="rounded-md border ">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="uppercase">Date Update</TableHead>
-                    <TableHead className="uppercase">Post Image</TableHead>
-                    <TableHead className="uppercase">Post Title</TableHead>
-                    <TableHead className="uppercase">Category</TableHead>
-                    <TableHead className="uppercase">Delete</TableHead>
-                    <TableHead className="uppercase">
-                      <span>Edit</span>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {userPost.map((post) => {
-                    // const createdAt = new Date(
-                    //   post.createdAt
-                    // ).toLocaleDateString("en-US", {
-                    //   year: "numeric",
-                    //   month: "long",
-                    //   day: "numeric",
-                    // });
-                    const updatedAt = new Date(
-                      post.updatedAt
-                    ).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    });
-
-                    return (
-                      <TableRow
-                        key={post._id}
-                        className="hover:bg-gray-100 dark:hover:bg-gray-600 "
-                      >
-                        <TableCell className="text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
-                          {updatedAt}
-                        </TableCell>
-                        <TableCell className="text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
-                          <img
-                            src={post.image}
-                            alt={post.title}
-                            className="w-20 h-10 object-cover rounded-md"
-                          />
-                        </TableCell>
-                        <TableCell className="text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
-                          {post.title}
-                        </TableCell>
-                        <TableCell className="text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
-                          {post.category}
-                        </TableCell>
-                        <TableCell className=" text-sm font-medium   text-gray-900 dark:text-gray-400 whitespace-nowrap ">
-                          <FaTrashAlt className="w-4 h-4 ml-4 cursor-pointer text-red-400 hover:text-red-500" />
-                        </TableCell>
-                        <TableCell className="text-sm font-medium text-gray-900 whitespace-nowrap">
-                          <Link
-                            to={`/update-post/${post._id}`}
-                            className="cursor-pointer text-teal-500 hover:text-teal-600"
-                          >
-                            <span>Edit</span>
-                          </Link>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
+      {currentUser.isAdmin && (
+        <div className="container mx-auto p-4 ">
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl font-bold">Your Posts</h1>
+            <Link to="/create-post">
+              <Button className="bg-blue-500 text-white px-4 py-1.5 rounded-lg hover:bg-blue-600 cursor-pointer">
+                Create New Post
+              </Button>
+            </Link>
           </div>
-          {showMore && (
-            <div className="flex justify-center mt-4">
-              <button
-                onClick={handleShowMore}
-                className="bg-blue-500 text-white px-4 py-1.5 rounded-lg hover:bg-blue-600 cursor-pointer"
-              >
-                Show More
-              </button>
+          {userPost.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 gap-4 mt-4">
+                {/*  md:grid-cols-2 lg:grid-cols-3 */}
+                <div>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="uppercase">Date Update</TableHead>
+                        <TableHead className="uppercase">Post Image</TableHead>
+                        <TableHead className="uppercase">Post Title</TableHead>
+                        <TableHead className="uppercase">Category</TableHead>
+                        <TableHead className="uppercase">Delete</TableHead>
+                        <TableHead className="uppercase">
+                          <span>Edit</span>
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {userPost.map((post) => {
+                        const updatedAt = new Date(
+                          post.updatedAt
+                        ).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        });
+
+                        return (
+                          <TableRow
+                            key={post._id}
+                            className="hover:bg-gray-100 dark:hover:bg-gray-600 "
+                          >
+                            <TableCell className="text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
+                              {updatedAt}
+                            </TableCell>
+                            <TableCell className="text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
+                              <img
+                                src={post.image}
+                                alt={post.title}
+                                className="w-20 h-10 object-cover rounded-md"
+                              />
+                            </TableCell>
+                            <TableCell className="text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
+                              {post.title}
+                            </TableCell>
+                            <TableCell className="text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
+                              {post.category}
+                            </TableCell>
+                            <TableCell className=" text-sm font-medium   text-gray-900 dark:text-gray-400 whitespace-nowrap ">
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <button disabled={delLoading}>
+                                    <FaTrashAlt className="w-4 h-4 ml-4 cursor-pointer text-red-400 hover:text-red-500" />
+                                  </button>
+                                </DialogTrigger>
+                                <ConfirmDialog
+                                  title={"Confirm Delete"}
+                                  description={`Are you sure you want to delete this "${post.title}" post?`}
+                                  btnName="Delete Post"
+                                  onClick={() => handleDeletePost(post._id)}
+                                />
+                              </Dialog>
+                            </TableCell>
+                            <TableCell className="text-sm font-medium text-gray-900 whitespace-nowrap">
+                              <Link
+                                to={`/update-post/${post._id}`}
+                                className="cursor-pointer text-teal-500 hover:text-teal-600"
+                              >
+                                <span>Edit</span>
+                              </Link>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+              {showMore && (
+                <div className="flex justify-center mt-4">
+                  <button
+                    onClick={handleShowMore}
+                    className="bg-blue-500 text-white px-4 py-1.5 rounded-lg hover:bg-blue-600 cursor-pointer"
+                  >
+                    Show More
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-screen">
+              <h1 className="text-2xl font-bold">No Posts Found</h1>
+              <p className="text-gray-500">You can create a new post.</p>
             </div>
           )}
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center h-screen">
-          <h1 className="text-2xl font-bold">No Posts Found</h1>
-          <p className="text-gray-500">You can create a new post.</p>
         </div>
       )}
     </div>

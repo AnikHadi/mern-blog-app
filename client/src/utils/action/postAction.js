@@ -38,3 +38,42 @@ export async function getPost(
     return error;
   }
 }
+
+export async function deletePost(postId, userId) {
+  if (!postId) {
+    return { success: false, message: "Post ID is required" };
+  }
+  if (!userId) {
+    return { success: false, message: "User ID is required" };
+  }
+  // Check if the user is an admin or the owner of the
+  try {
+    const res = await fetch(`/api/post/delete-post/${postId}/${userId}`, {
+      method: "DELETE",
+    });
+    return await res.json();
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function updatePost(postId, postData) {
+  if (!postId) {
+    return { success: false, message: "Post ID is required" };
+  }
+  if (!postData) {
+    return { success: false, message: "Post data is required" };
+  }
+  try {
+    const res = await fetch(`/api/post/edit/${postId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    });
+    return await res.json();
+  } catch (error) {
+    return error;
+  }
+}

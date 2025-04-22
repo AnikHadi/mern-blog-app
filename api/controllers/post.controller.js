@@ -89,3 +89,54 @@ export const getPosts = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deletePost = async (req, res, next) => {
+  const { postId, userId } = req.params;
+
+  if (!userId) {
+    return next(errorHandler(400, "Please provide User ID!"));
+  }
+  if (!postId) {
+    return next(errorHandler(400, "Please provide Post ID!"));
+  }
+  if (!req.user.isAdmin || req.user.userId !== userId) {
+    return next(errorHandler(403, "You do not have allowed to delete a post!"));
+  }
+  try {
+    const post = await Post.findByIdAndDelete(postId);
+    if (!post) {
+      return next(errorHandler(404, "Post not found!"));
+    }
+    res.status(200).json({
+      success: true,
+      message: "Post deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const editPost = async (req, res, next) => {
+  const { postId } = req.query;
+  if (!req.user.isAdmin) {
+    return next(errorHandler(403, "You do not have allowed to edit a post!"));
+  }
+  if (!postId) {
+    return next(errorHandler(400, "Please provide Post ID!"));
+  }
+  try {
+    const post = await Post.findByIdAndUpdate(postId, req.body, {
+      new: true,
+    });
+    if (!post) {
+      return next(errorHandler(404, "Post not found!"));
+    }
+    res.status(200).json({
+      post,
+      success: true,
+      message: "Post updated successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
