@@ -90,6 +90,28 @@ export const getPosts = async (req, res, next) => {
   }
 };
 
+export const getSinglePosts = async (req, res, next) => {
+  const { postId } = req.params;
+  // if (!userId) {
+  //   return next(errorHandler(400, "Please provide User ID!"));
+  // }
+  if (!postId) {
+    return next(errorHandler(400, "Please provide Post ID!"));
+  }
+  try {
+    const post = await Post.findById(postId).populate("user");
+    if (!post) {
+      return next(errorHandler(404, "Post not found!"));
+    }
+    res.status(200).json({
+      post,
+      success: true,
+      message: "Post fetched successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 export const deletePost = async (req, res, next) => {
   const { postId, userId } = req.params;
 
@@ -117,20 +139,33 @@ export const deletePost = async (req, res, next) => {
 };
 
 export const editPost = async (req, res, next) => {
-  const { postId } = req.query;
-  if (!req.user.isAdmin) {
+  const { postId, userId } = req.params;
+  if (!req.user.isAdmin || req.user.userId !== userId) {
     return next(errorHandler(403, "You do not have allowed to edit a post!"));
   }
   if (!postId) {
     return next(errorHandler(400, "Please provide Post ID!"));
   }
+
+  const slug = req.body.title
+    .split(" ")
+    .join("-")
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9-]/g, "");
+
+  const newPost = {
+    ...req.body,
+    slug,
+  };
+
   try {
-    const post = await Post.findByIdAndUpdate(postId, req.body, {
-      new: true,
-    });
-    if (!post) {
-      return next(errorHandler(404, "Post not found!"));
-    }
+    const post = await Post.findByIdAndUpdate(
+      postId,
+      { $set: newPost },
+      {
+        new: true,
+      }
+    );
     res.status(200).json({
       post,
       success: true,

@@ -38,6 +38,15 @@ export async function getPost(
     return error;
   }
 }
+export async function getSinglePost(postId = "") {
+  try {
+    // const res = await fetch(`/api/post/get-posts/${postId}`);
+    const res = await fetch(`/api/post/get-posts?postId=${postId}`);
+    return await res.json();
+  } catch (error) {
+    return error;
+  }
+}
 
 export async function deletePost(postId, userId) {
   if (!postId) {
@@ -57,15 +66,19 @@ export async function deletePost(postId, userId) {
   }
 }
 
-export async function updatePost(postId, postData) {
+export async function updatePost(postId, userId, postData) {
   if (!postId) {
     return { success: false, message: "Post ID is required" };
+  }
+  if (!userId) {
+    return { success: false, message: "User ID is required" };
   }
   if (!postData) {
     return { success: false, message: "Post data is required" };
   }
+
   try {
-    const res = await fetch(`/api/post/edit/${postId}`, {
+    const res = await fetch(`/api/post/edit/${postId}/${userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
