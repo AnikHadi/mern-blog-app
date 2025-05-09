@@ -58,7 +58,6 @@ export default function DashPosts() {
       toast.error(posts.message);
     }
   };
-  // washing Time is 7.07.46
 
   // Function to delete a post
   const handleDeletePost = async (postId) => {

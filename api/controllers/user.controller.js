@@ -11,10 +11,13 @@ export const getUsers = async (req, res) => {
     return next(errorHandler(403, "You are not allowed to see all users"));
   }
 
+  console.log(req.query);
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 9;
     const sortDirection = req.query.sort === "asc" ? 1 : -1;
+
+    console.log(limit);
 
     const users = await User.find()
       .sort({ createdAt: sortDirection })
@@ -116,7 +119,7 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-  if (req.user.userId !== req.params.userId) {
+  if (req.user.userId !== req.params.userId && !req.user.isAdmin) {
     return next(errorHandler(403, "You are not allowed to delete this user"));
   }
   try {
@@ -132,6 +135,7 @@ export const deleteUser = async (req, res, next) => {
     return next(error);
   }
 };
+
 export const signout = async (req, res, next) => {
   try {
     res.clearCookie("access_token").status(200).json({
