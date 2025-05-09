@@ -7,8 +7,58 @@ export const test = (req, res) => {
 };
 
 export const getUsers = async (req, res) => {
-  //   const users = await User.find();
-  res.json("users");
+  if (!req.user.isAdmin) {
+    return next(errorHandler(403, "You are not allowed to see all users"));
+  }
+
+  try {
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+    const sortDirection = req.query.sort === "asc" ? 1 : -1;
+
+    const users = await User.find()
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit)
+      .select({ password: 0, __v: 0 });
+
+    const totalUsers = await User.countDocuments();
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthUsers = await User.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    })
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit)
+      .select({ password: 0, __v: 0 });
+
+    // const totalPages = Math.ceil(totalUsers / limit);
+
+    // const currentPage = Math.floor(startIndex / limit) + 1;
+    // const hasNextPage = currentPage < totalPages;
+    // const hasPreviousPage = currentPage > 1;
+
+    res.status(200).json({
+      users: users,
+      success: true,
+      totalUsers,
+      lastMonthUsers,
+      // totalPages,
+      // currentPage,
+      // hasNextPage,
+      // hasPreviousPage,
+    });
+  } catch (error) {
+    return next(error);
+  }
 };
 
 export const updateUser = async (req, res, next) => {
