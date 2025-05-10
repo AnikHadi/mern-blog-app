@@ -33,6 +33,12 @@ export async function getPost(
     const res = await fetch(
       `/api/post/get-posts?userId=${userId}&startIndex=${startIndex}&category=${category}&slug=${slug}&postId=${postId}&searchTerm=${searchTerm}&order=${order}&limit=${limit}`
     );
+    if (!res.ok) {
+      return {
+        success: false,
+        message: "Failed to fetch posts",
+      };
+    }
     return await res.json();
   } catch (error) {
     return error;

@@ -9,6 +9,7 @@ import {
 import { deletePost, getPost } from "@/utils/action/postAction";
 import { useEffect, useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
+import { ImSpinner9 } from "react-icons/im";
 import { useSelector } from "react-redux";
 import { Link } from "react-router";
 import { toast } from "react-toastify";
@@ -21,11 +22,13 @@ export default function DashPosts() {
   const [userPost, setUserPost] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [delLoading, setDelLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Fetch posts from the server when the component mounts
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setIsLoading(true);
       const posts = await getPost(currentUser._id);
       if (posts.success) {
         setUserPost(posts.posts);
@@ -34,8 +37,10 @@ export default function DashPosts() {
         } else {
           setShowMore(true);
         }
+        setIsLoading(false);
       } else {
         toast.error(posts.message);
+        setIsLoading(false);
       }
     };
     if (currentUser.isAdmin) {
@@ -81,7 +86,7 @@ export default function DashPosts() {
     setDelLoading(false);
   };
 
-  return (
+  return !isLoading ? (
     <div>
       {currentUser.isAdmin && (
         <div className="container mx-auto p-4 ">
@@ -137,7 +142,9 @@ export default function DashPosts() {
                               />
                             </TableCell>
                             <TableCell className="text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
-                              {post.title}
+                              <Link to={`/post/${post.slug}`}>
+                                {post.title}
+                              </Link>
                             </TableCell>
                             <TableCell className="text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
                               {post.category}
@@ -191,6 +198,13 @@ export default function DashPosts() {
           )}
         </div>
       )}
+    </div>
+  ) : (
+    <div className="flex gap-4 items-center justify-center min-h-[calc(100vh-271px)]">
+      <ImSpinner9 className="animate-spin text-4xl  " />
+      <div className="text-5xl font-bold bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent leading-16">
+        Loading...
+      </div>
     </div>
   );
 }

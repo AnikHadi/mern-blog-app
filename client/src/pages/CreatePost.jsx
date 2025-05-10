@@ -17,7 +17,6 @@ import { toast } from "react-toastify";
 
 export default function CreatePost() {
   const { quill, quillRef, Quill } = useQuill();
-  const counterRef = useRef();
   const filePickerRef = useRef();
   const [allCategories, setAllCategories] = useState([]);
   const [imageFileUrl, setImageFileUrl] = useState(null);
@@ -75,15 +74,6 @@ export default function CreatePost() {
       }
     }
   };
-
-  useEffect(() => {
-    if (quill) {
-      quill.on("text-change", () => {
-        // console.log(quill.root.innerHTML);
-        counterRef.current.innerHTML = quill.root.innerHTML;
-      });
-    }
-  }, [quill]);
 
   return (
     <div className="min-h-screen max-w-3xl p-3 mx-auto">
@@ -152,7 +142,6 @@ export default function CreatePost() {
           Publish Post
         </Button>
       </form>
-      <div ref={counterRef} />
     </div>
   );
 }

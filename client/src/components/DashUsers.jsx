@@ -1,6 +1,7 @@
 import { deleteProfile, getAllUsers } from "@/utils/action/userAction";
 import { useEffect, useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
+import { ImSpinner9 } from "react-icons/im";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import ConfirmDialog from "./ConfirmDialog";
@@ -19,10 +20,12 @@ export default function DashUsers() {
   const [delLoading, setDelLoading] = useState(false);
   const [showMore, setShowMore] = useState(true);
   const currentUser = useSelector((state) => state.user.currentUser);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch Single post Data in the Database
+  // Fetch all user Data in the Database
   useEffect(() => {
     const singlePost = async () => {
+      setIsLoading(true);
       const result = await getAllUsers();
       if ("success" in result) {
         if (result.success) {
@@ -32,8 +35,10 @@ export default function DashUsers() {
           } else {
             setShowMore(true);
           }
+          setIsLoading(false);
         } else {
           toast.error(result.message);
+          setIsLoading(false);
         }
       }
     };
@@ -72,7 +77,7 @@ export default function DashUsers() {
     setDelLoading(false);
   };
 
-  return (
+  return !isLoading ? (
     <div>
       {currentUser.isAdmin && (
         <>
@@ -172,6 +177,13 @@ export default function DashUsers() {
           )}
         </>
       )}
+    </div>
+  ) : (
+    <div className="flex gap-4 items-center justify-center min-h-[calc(100vh-271px)]">
+      <ImSpinner9 className="animate-spin text-4xl " />
+      <div className="text-5xl font-bold bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent leading-16">
+        Loading...
+      </div>
     </div>
   );
 }

@@ -11,13 +11,10 @@ export const getUsers = async (req, res) => {
     return next(errorHandler(403, "You are not allowed to see all users"));
   }
 
-  console.log(req.query);
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 9;
     const sortDirection = req.query.sort === "asc" ? 1 : -1;
-
-    console.log(limit);
 
     const users = await User.find()
       .sort({ createdAt: sortDirection })

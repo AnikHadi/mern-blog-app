@@ -68,14 +68,14 @@ export const getPosts = async (req, res, next) => {
     const totalPosts = await Post.countDocuments();
     const now = new Date();
     const oneMonthAgo = new Date(now.setMonth(now.getMonth() - 1));
-    const recentPosts = await Post.find({
+    const lastMonthPosts = await Post.find({
       createdAt: { $gte: oneMonthAgo },
     }).countDocuments();
 
     res.status(200).json({
       posts,
       totalPosts,
-      recentPosts,
+      lastMonthPosts,
       totalPages: Math.ceil(totalPosts / limit),
       currentPage: Math.ceil(startIndex / limit) + 1,
       hasNextPage: startIndex + limit < totalPosts,
