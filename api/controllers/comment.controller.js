@@ -40,10 +40,9 @@ export const getComments = async (req, res, next) => {
   }
 
   try {
-    const comments = await Comment.find({ postId }).populate("userId", [
-      "username",
-      "avatar",
-    ]);
+    const comments = await Comment.find({ postId })
+      .populate("userId", ["username", "avatar"])
+      .sort({ createdAt: -1 });
 
     const totalComments = await Comment.countDocuments({ postId });
 

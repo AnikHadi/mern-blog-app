@@ -59,6 +59,7 @@ export default function CommentSection({ postId }) {
     const comment = await createComment(data, postId, userId);
     if (comment.success) {
       toast.success("Comment added successfully");
+      setAllComments((prev) => [comment.comment, ...prev]);
       setComments("");
     } else {
       toast.error(comment.message);
@@ -138,34 +139,13 @@ export default function CommentSection({ postId }) {
               </p>
             </div>
             <div>
-              {allComments.map((comment) => {
-                const date = new Date(comment.createdAt).toLocaleDateString();
-                return (
-                  <div
-                    key={comment._id}
-                    className="flex gap-4 items-center my-5 pb-3 border-b border-gray-400/50"
-                  >
-                    <img
-                      src={comment.userId.avatar}
-                      alt={comment.userId.username}
-                      className="h-10 w-10 object-cover rounded-full"
-                    />
-                    <div>
-                      <div className="flex gap-2 items-center">
-                        <p className="text-cyan-700 ">
-                          @{comment.userId.username}
-                        </p>
-                        <p className="text-sm text-gray-500">{date}</p>
-                      </div>
-                      <p>{comment.comment}</p>
-                      <CommentUpdate
-                        comment={comment}
-                        currentUser={currentUser}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
+              {allComments.map((comment) => (
+                <CommentUpdate
+                  key={comment._id}
+                  comment={comment}
+                  currentUser={currentUser}
+                />
+              ))}
             </div>
           </div>
         ) : (
