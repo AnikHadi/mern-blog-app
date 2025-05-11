@@ -283,11 +283,24 @@ p {
   background: transparent !important;
   color: #fefefe !important;
 }
-.post-content li > span::before {
-  content: "*";
-  color: #007acc;
-  font-size: 1.2em;
+.post-content li {
+  display: flex;
+  align-items: center;
+  padding-left: 1.5rem;
+  list-style: circle;
+  /* list-style-type: none; */
+}
+.post-content li::before {
+  content: "";
   margin-right: 0.5em;
+  margin-top: 0.2em;
+  background: #374151d2;
+  width: 7px;
+  height: 7px;
+  border-radius: 100%;
+}
+.dark .post-content li::before {
+  background: #ffffff;
 }
 
 .dark .ql-container li > span,

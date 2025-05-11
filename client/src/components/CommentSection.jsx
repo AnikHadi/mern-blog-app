@@ -1,8 +1,19 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router";
 
 export default function CommentSection({ postId }) {
   const currentUser = useSelector((state) => state.user.currentUser);
+  const [comments, setComments] = useState("");
+
+  // console.log(postId);
+
+  const handleSubmit = () => {
+    if (comments.length < 1) return;
+    // Add your comment submission logic here
+    console.log("Comment submitted:", comments);
+    setComments("");
+  };
 
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
@@ -38,6 +49,34 @@ export default function CommentSection({ postId }) {
             Sign In
           </Link>
         </div>
+      )}
+      {currentUser && (
+        <form
+          action={handleSubmit}
+          className="border-2 border-teal-400 rounded-lg p-3"
+        >
+          <textarea
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            placeholder="Write a comment..."
+            rows="3"
+            maxLength="200"
+            onChange={(e) => {
+              setComments(e.target.value);
+            }}
+            value={comments}
+          ></textarea>
+          <div className="flex justify-between items-center mt-2">
+            <span className="text-gray-500 text-xs">
+              {200 - comments?.length} Characters remaining
+            </span>
+            <button
+              className="border-2 border-teal-400 text-white px-4 py-1 rounded-md hover:bg-cyan-600 cursor-pointer"
+              type="submit"
+            >
+              Comment
+            </button>
+          </div>
+        </form>
       )}
     </div>
   );
