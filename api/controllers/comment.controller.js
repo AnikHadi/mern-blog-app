@@ -4,8 +4,6 @@ import { errorHandler } from "../utils/error.js";
 export const createComment = async (req, res, next) => {
   const { postId, userId } = req.params;
 
-  console.log("req.body", req.body);
-
   if (!req.user.isAdmin || !req.user._id === userId) {
     return next(errorHandler(403, "You do not have allowed to create a post!"));
   }

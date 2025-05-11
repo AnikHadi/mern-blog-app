@@ -1,18 +1,68 @@
-import { useState } from "react";
+import { createComment, getAllComment } from "@/utils/action/commentAction";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router";
+import { toast } from "react-toastify";
+import CommentUpdate from "./CommentUpdate";
 
 export default function CommentSection({ postId }) {
   const currentUser = useSelector((state) => state.user.currentUser);
   const [comments, setComments] = useState("");
+  const [allComments, setAllComments] = useState([]);
 
-  // console.log(postId);
+  // fetch all comments
+  useEffect(() => {
+    if (postId) {
+      const fetchComments = async () => {
+        const data = await getAllComment(postId);
+        if (data.success) {
+          setAllComments(data.comments);
+        } else {
+          toast.error(data.message);
+        }
+      };
+      fetchComments();
+    }
+  }, [postId]);
 
-  const handleSubmit = () => {
+  console.log(allComments);
+
+  // handle enter key to submit comment
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        handleSubmit();
+      }
+    };
+
+    const textarea = document.querySelector("textarea");
+    if (textarea) {
+      textarea.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      if (textarea) {
+        textarea.removeEventListener("keydown", handleKeyDown);
+      }
+    };
+  }, [comments]);
+
+  // handle submit comment
+  const handleSubmit = async () => {
     if (comments.length < 1) return;
-    // Add your comment submission logic here
-    console.log("Comment submitted:", comments);
-    setComments("");
+
+    const data = {
+      comment: comments,
+    };
+    const userId = currentUser._id;
+    const comment = await createComment(data, postId, userId);
+    if (comment.success) {
+      toast.success("Comment added successfully");
+      setComments("");
+    } else {
+      toast.error(comment.message);
+    }
   };
 
   return (
@@ -78,6 +128,50 @@ export default function CommentSection({ postId }) {
           </div>
         </form>
       )}
+      <div>
+        {allComments?.length > 0 ? (
+          <div>
+            <div>
+              <h2 className="text-2xl font-bold my-5">Comments</h2>
+              <p className="text-gray-500 text-sm">
+                {allComments.length} Comments
+              </p>
+            </div>
+            <div>
+              {allComments.map((comment) => {
+                const date = new Date(comment.createdAt).toLocaleDateString();
+                return (
+                  <div
+                    key={comment._id}
+                    className="flex gap-4 items-center my-5 pb-3 border-b border-gray-400/50"
+                  >
+                    <img
+                      src={comment.userId.avatar}
+                      alt={comment.userId.username}
+                      className="h-10 w-10 object-cover rounded-full"
+                    />
+                    <div>
+                      <div className="flex gap-2 items-center">
+                        <p className="text-cyan-700 ">
+                          @{comment.userId.username}
+                        </p>
+                        <p className="text-sm text-gray-500">{date}</p>
+                      </div>
+                      <p>{comment.comment}</p>
+                      <CommentUpdate
+                        comment={comment}
+                        currentUser={currentUser}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <p className="text-gray-500 text-sm">No comments yet</p>
+        )}
+      </div>
     </div>
   );
 }
