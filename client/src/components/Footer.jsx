@@ -112,7 +112,10 @@ export default function Footer() {
               <FaGithub className="text-2xl text-gray-950 dark:text-gray-100" />
             </Link>
             <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
-              <FaInstagram color="#5B51D8" className="text-2xl " />
+              <FaInstagram
+                className="text-pink-600 hover:text-pink-400  cursor-pointer transition-colors duration-300 text-2xl "
+                aria-label="Instagram icon"
+              />
             </Link>
             <Link to="/" className="text-sm text-gray-500 hover:text-gray-700">
               <FaLinkedin color="#0077B5" className="text-2xl" />
@@ -123,3 +126,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+// color="#5B51D8"

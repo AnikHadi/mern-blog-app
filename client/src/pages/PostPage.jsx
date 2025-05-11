@@ -1,4 +1,5 @@
 import CallToAction from "@/components/CallToAction";
+import CommentSection from "@/components/CommentSection";
 import { getPost } from "@/utils/action/postAction";
 import { useEffect, useState } from "react";
 import { ImSpinner9 } from "react-icons/im";
@@ -32,7 +33,6 @@ export default function PostPage() {
     };
     fetchPost();
   }, [postSlug]);
-  console.log(post);
 
   return !isLoading ? (
     <main className="container mx-auto p-3 flex flex-col min-h-[calc(100vh-271px)]">
@@ -65,6 +65,7 @@ export default function PostPage() {
       <div className="max-w-4xl mx-auto w-full">
         <CallToAction />
       </div>
+      <CommentSection postId={post._id} />
     </main>
   ) : (
     <div className="flex gap-4 items-center justify-center min-h-[calc(100vh-271px)]">

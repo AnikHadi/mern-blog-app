@@ -10,13 +10,19 @@ import {
 import { imageUpload } from "@/utils/action/authAction";
 import { getAllCategories } from "@/utils/action/categoryAction";
 import { createPost } from "@/utils/action/postAction";
+import { formats, modules, placeholder, theme } from "@/utils/quillUtil";
 import "quill/dist/quill.snow.css";
 import { useEffect, useRef, useState } from "react";
 import { useQuill } from "react-quilljs";
 import { toast } from "react-toastify";
 
 export default function CreatePost() {
-  const { quill, quillRef, Quill } = useQuill();
+  const { quill, quillRef, Quill } = useQuill({
+    theme,
+    modules,
+    formats,
+    placeholder,
+  });
   const filePickerRef = useRef();
   const [allCategories, setAllCategories] = useState([]);
   const [imageFileUrl, setImageFileUrl] = useState(null);
@@ -135,6 +141,9 @@ export default function CreatePost() {
         <div className="h-[300px] mb-16">
           <div ref={quillRef} />
         </div>
+        {/* <div className="flex items-center justify-center h-full">
+          <QuillTextEditor />
+        </div> */}
         <Button
           type="submit"
           className="w-full cursor-pointer bg-gradient-to-r from-indigo-500/80 hover:from-indigo-500  via-purple-500/80 hover:via-purple-500 to-pink-500/80 hover:to-pink-500"

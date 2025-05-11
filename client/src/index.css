@@ -233,10 +233,111 @@ p {
   color: rgb(73, 149, 199);
   text-decoration: none;
 }
+.dark .ql-container a,
 .dark .post-content a {
   color: rgb(199, 20, 10);
   background-color: none;
 }
 .post-content a:hover {
   text-decoration: underline;
+}
+
+.post-content .ql-code-block-container {
+  position: relative;
+  background: #1e1e1e;
+  border-radius: 8px;
+  padding: 1rem 1rem 1rem 1rem;
+  margin: 1rem 0;
+  color: #d4d4d4;
+  font-family: "Fira Code", Consolas, Monaco, "Courier New", monospace;
+  font-size: 14px;
+  overflow-x: auto;
+  max-width: 90vw;
+  max-height: 400px;
+  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); */
+}
+
+/* .dark .ql-container .ql-code-block-container, */
+.dark .post-content .ql-code-block-container {
+  background-color: #f9f9f953;
+  color: #f5f3f3;
+}
+
+.dark .ql-container p > span,
+.dark .post-content p > span {
+  background: transparent !important;
+  color: #fefefe !important;
+}
+.dark .ql-container h1 > span,
+.dark .ql-container h2 > span,
+.dark .ql-container h3 > span,
+.dark .ql-container h4 > span,
+.dark .ql-container h5 > span,
+.dark .ql-container h6 > span,
+.dark .post-content h1 > span,
+.dark .post-content h2 > span,
+.dark .post-content h3 > span,
+.dark .post-content h4 > span,
+.dark .post-content h5 > span,
+.dark .post-content h6 > span {
+  background: transparent !important;
+  color: #fefefe !important;
+}
+.post-content li > span::before {
+  content: "*";
+  color: #007acc;
+  font-size: 1.2em;
+  margin-right: 0.5em;
+}
+
+.dark .ql-container li > span,
+.dark .post-content li > span {
+  background: transparent !important;
+  color: #fefefe !important;
+}
+
+.post-content > .ql-indent-1 {
+  margin-left: 20px;
+  color: #333;
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: #f9f9f9;
+  padding: 5px;
+  border-left: 4px solid #007acc;
+  border-radius: 4px;
+}
+
+.dark .ql-container .ql-indent-1 > code,
+.dark .post-content > .ql-indent-1 {
+  color: #ffffff;
+  background-color: #f9f9f953;
+  border-left: 4px solid #007acc;
+}
+
+.post-content code {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.dark .ql-container p > strong,
+.dark .ql-container p > em,
+.dark .ql-container p > u,
+.dark .ql-container p > s,
+.dark .ql-container p > sub,
+.dark .ql-container p > sup,
+.dark .ql-container p > a {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+.dark .post-content p > strong,
+.dark .post-content p > em,
+.dark .post-content p > u,
+.dark .post-content p > s,
+.dark .post-content p > sub,
+.dark .post-content p > sup,
+.dark .post-content p > a {
+  background-color: transparent !important;
+  color: inherit !important;
 }

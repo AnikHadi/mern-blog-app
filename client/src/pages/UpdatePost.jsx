@@ -10,6 +10,7 @@ import {
 import { imageUpload } from "@/utils/action/authAction";
 import { getAllCategories } from "@/utils/action/categoryAction";
 import { getSinglePost, updatePost } from "@/utils/action/postAction";
+import { formats, modules, placeholder, theme } from "@/utils/quillUtil";
 import "quill/dist/quill.snow.css";
 import { useEffect, useRef, useState } from "react";
 import { useQuill } from "react-quilljs";
@@ -18,7 +19,12 @@ import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 
 export default function UpdatePost() {
-  const { quill, quillRef, Quill } = useQuill();
+  const { quill, quillRef, Quill } = useQuill({
+    theme,
+    modules,
+    formats,
+    placeholder,
+  });
   const currentUser = useSelector((state) => state.user.currentUser);
   const filePickerRef = useRef();
   const [allCategories, setAllCategories] = useState([]);
