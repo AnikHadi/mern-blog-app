@@ -1,4 +1,7 @@
-import { createComment, getAllComment } from "@/utils/action/commentAction";
+import {
+  createComment,
+  getAllSinglePostComment,
+} from "@/utils/action/commentAction";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router";
@@ -14,7 +17,7 @@ export default function CommentSection({ postId }) {
   useEffect(() => {
     if (postId) {
       const fetchComments = async () => {
-        const data = await getAllComment(postId);
+        const data = await getAllSinglePostComment(postId);
         if (data.success) {
           setAllComments(data.comments);
         } else {

@@ -1,8 +1,17 @@
 "use server";
 
-export async function getAllComment(postId) {
+export async function getAllComment() {
   try {
-    const res = await fetch(`/api/comment/getComments/${postId}`);
+    const res = await fetch("/api/comment/getAllComments");
+    return await res.json();
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function getAllSinglePostComment(postId) {
+  try {
+    const res = await fetch(`/api/comment/getSinglePostComments/${postId}`);
     return await res.json();
   } catch (error) {
     return error;
