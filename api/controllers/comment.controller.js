@@ -22,10 +22,10 @@ export const createComment = async (req, res, next) => {
 
   try {
     const savedComment = await newComment.save();
+    await savedComment.populate("userId", ["username", "avatar"]);
     res.status(201).json({
       comment: savedComment,
       success: true,
-      message: "Comment created successfully",
     });
   } catch (error) {
     next(error);

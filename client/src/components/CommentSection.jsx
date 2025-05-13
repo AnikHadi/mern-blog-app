@@ -58,9 +58,9 @@ export default function CommentSection({ postId }) {
     const userId = currentUser._id;
     const comment = await createComment(data, postId, userId);
     if (comment.success) {
-      toast.success("Comment added successfully");
       setAllComments((prev) => [comment.comment, ...prev]);
       setComments("");
+      console.log(comment);
     } else {
       toast.error(comment.message);
     }

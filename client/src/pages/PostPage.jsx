@@ -1,5 +1,6 @@
 import CallToAction from "@/components/CallToAction";
 import CommentSection from "@/components/CommentSection";
+import PostCard from "@/components/PostCard";
 import { getPost } from "@/utils/action/postAction";
 import { useEffect, useState } from "react";
 import { ImSpinner9 } from "react-icons/im";
@@ -10,15 +11,8 @@ export default function PostPage() {
   const { postSlug } = useParams();
   const [post, setPost] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  // const { data: post, isLoading } = useGetPostQuery(postSlug);
+  const [recentPosts, setRecentPosts] = useState([]);
 
-  // if (!post) {
-  //     return <div>Post not found</div>;
-  // }
-  // const { title, content } = post;
-  // const { title, content } = post;
-
-  // Fetch the post data using the postSlug
   useEffect(() => {
     const fetchPost = async () => {
       setIsLoading(true);
@@ -34,9 +28,27 @@ export default function PostPage() {
     fetchPost();
   }, [postSlug]);
 
+  //  get recent posts
+  useEffect(() => {
+    const fetchRecentPosts = async () => {
+      setIsLoading(true);
+      try {
+        const res = await fetch(`/api/post/get-posts?limit=3`);
+        if (!res.ok) {
+          return;
+        }
+        const data = await res.json();
+        setRecentPosts(data.posts);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+    fetchRecentPosts();
+  }, []);
+
   return !isLoading ? (
     <main className="container mx-auto p-3 flex flex-col min-h-[calc(100vh-271px)]">
-      <h1 className="text-3xl mt-10 p-3 text-center max-w-2xl mx-auto lg:text-4xl">
+      <h1 className="text-3xl mt-10 p-3 line-clamp-2 leading-12 text-center max-w-2xl mx-auto lg:text-4xl">
         {post?.title}
       </h1>
       <Link
@@ -66,6 +78,14 @@ export default function PostPage() {
         <CallToAction />
       </div>
       <CommentSection postId={post._id} />
+
+      <div className="flex flex-col justify-center items-center mb-10">
+        <h1 className="text-xl mt-5">Recent articles</h1>
+        <div className=" flex flex-wrap gap-4 justify-center mt-5">
+          {recentPosts.length > 0 &&
+            recentPosts?.map((post) => <PostCard key={post._id} post={post} />)}
+        </div>
+      </div>
     </main>
   ) : (
     <div className="flex gap-4 items-center justify-center min-h-[calc(100vh-271px)]">
