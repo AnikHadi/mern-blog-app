@@ -95,3 +95,67 @@ export const likeComment = async (req, res, next) => {
     next(error);
   }
 };
+
+export const editComment = async (req, res, next) => {
+  const { commentId } = req.params;
+  const userId = req.user.userId;
+
+  if (!commentId) {
+    return next(errorHandler(400, "Comment ID is required"));
+  }
+
+  try {
+    const comment = await Comment.findById(commentId);
+
+    if (!comment) {
+      return next(errorHandler(404, "Comment not found"));
+    }
+
+    if (!req.user.isAdmin || comment.userId.toString() !== userId) {
+      return next(errorHandler(403, "You do not have allowed to edit a post!"));
+    }
+
+    const editedComment = await Comment.findByIdAndUpdate(
+      commentId,
+      { $set: req.body },
+      { new: true }
+    );
+
+    res.status(200).json({
+      comment: editedComment,
+      success: true,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteComment = async (req, res, next) => {
+  const { commentId } = req.params;
+  const userId = req.user.userId;
+
+  if (!commentId) {
+    return next(errorHandler(400, "Comment ID is required"));
+  }
+
+  try {
+    const comment = await Comment.findById(commentId);
+
+    if (!comment) {
+      return next(errorHandler(404, "Comment not found"));
+    }
+
+    if (!req.user.isAdmin || comment.userId.toString() !== userId) {
+      return next(errorHandler(403, "You do not have allowed to edit a post!"));
+    }
+
+    await Comment.findByIdAndDelete(commentId);
+
+    res.status(200).json({
+      success: true,
+      message: "Comment deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};

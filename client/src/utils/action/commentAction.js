@@ -37,3 +37,31 @@ export async function likeComment(commentId) {
     return error;
   }
 }
+export async function editComment(commentId, data) {
+  try {
+    const res = await fetch(`/api/comment/editComment/${commentId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    return await res.json();
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function deleteComment(commentId) {
+  try {
+    const res = await fetch(`/api/comment/deleteComment/${commentId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return await res.json();
+  } catch (error) {
+    return error;
+  }
+}
