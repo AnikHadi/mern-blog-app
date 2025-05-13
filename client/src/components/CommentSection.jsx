@@ -25,7 +25,7 @@ export default function CommentSection({ postId }) {
     }
   }, [postId]);
 
-  console.log(allComments);
+  // console.log(allComments);
 
   // handle enter key to submit comment
   useEffect(() => {
@@ -121,7 +121,7 @@ export default function CommentSection({ postId }) {
               {200 - comments?.length} Characters remaining
             </span>
             <button
-              className="border-2 border-teal-400 text-white px-4 py-1 rounded-md hover:bg-cyan-600 cursor-pointer"
+              className="border-2 border-teal-400 text-black dark:text-white px-4 py-1 rounded-md hover:bg-cyan-600 hover:text-white cursor-pointer"
               type="submit"
             >
               Comment
@@ -144,6 +144,7 @@ export default function CommentSection({ postId }) {
                   key={comment._id}
                   comment={comment}
                   currentUser={currentUser}
+                  setAllComments={setAllComments}
                 />
               ))}
             </div>

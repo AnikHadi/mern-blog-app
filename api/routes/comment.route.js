@@ -2,6 +2,7 @@ import express from "express";
 import {
   createComment,
   getComments,
+  likeComment,
 } from "../controllers/comment.controller.js";
 import { verifyToken } from "../utils/VerifyUser.js";
 
@@ -9,5 +10,6 @@ const router = express.Router();
 
 router.post("/create/:postId/:userId", verifyToken, createComment);
 router.get("/getComments/:postId", getComments);
+router.put("/likeComment/:commentId", verifyToken, likeComment);
 
 export default router;

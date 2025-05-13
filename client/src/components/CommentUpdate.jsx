@@ -1,7 +1,42 @@
+import { likeComment } from "@/utils/action/commentAction";
 import moment from "moment";
 import { BiSolidLike } from "react-icons/bi";
+import { toast } from "react-toastify";
 
-export default function CommentUpdate({ comment, currentUser }) {
+export default function CommentUpdate({
+  comment,
+  currentUser,
+  setAllComments,
+}) {
+  // const handleDelete = async () => {
+  // Implement delete functionality here
+  // };
+  const handleLike = async () => {
+    if (!currentUser) {
+      toast.warning("Please login to like a comment");
+      return;
+    }
+    const like = await likeComment(comment._id);
+    if (like.success) {
+      setAllComments((prev) => {
+        prev.map((c) => {
+          if (c._id === comment._id) {
+            console.log(c);
+            c.likes = like.comment.likes;
+            c.numberOfLikes = like.comment.numberOfLikes;
+          }
+          return { ...c };
+        });
+
+        return [...prev];
+      });
+    } else {
+      console.error("Error liking comment:", like.message);
+    }
+  };
+
+  const userLike = currentUser && comment.likes.includes(currentUser._id);
+
   return (
     <div className="flex gap-4 items-center my-5 pb-3 border-b border-gray-400/50">
       <img
@@ -19,9 +54,20 @@ export default function CommentUpdate({ comment, currentUser }) {
         <p className="text-sm">{comment.comment}</p>
 
         <div className="flex gap-2 items-center border-t-2 border-gray-300/50 pt-1 mt-2 text-xs">
-          <BiSolidLike className="cursor-pointer transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110" />
-          <p className="text-xs text-gray-500">{comment.likes} Likes</p>
-          {comment.userId._id === currentUser._id && (
+          <BiSolidLike
+            onClick={() => handleLike(comment._id)}
+            className={`text-base cursor-pointer transition delay-150 duration-100 ease-in hover:-translate-y-0.2 hover:scale-150 ${
+              userLike ? "text-cyan-500" : "text-gray-500"
+            }`}
+          />
+          <p className="text-xs text-gray-500">
+            {comment?.numberOfLikes
+              ? `${comment.numberOfLikes} ${
+                  comment.numberOfLikes > 1 ? "Likes" : "Like"
+                }`
+              : ""}
+          </p>
+          {comment?.userId._id === currentUser?._id && (
             <div className="flex gap-2 text-xs">
               <button>
                 <p className=" text-gray-500 cursor-pointer hover:underline">
@@ -38,3 +84,5 @@ export default function CommentUpdate({ comment, currentUser }) {
     </div>
   );
 }
+
+// comment?.numberOfLikes > 1 ? " Likes" : " Like"

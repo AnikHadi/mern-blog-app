@@ -55,3 +55,43 @@ export const getComments = async (req, res, next) => {
     next(error);
   }
 };
+
+export const likeComment = async (req, res, next) => {
+  const { commentId } = req.params;
+  const userId = req.user.userId;
+
+  if (!userId) {
+    return next(errorHandler(403, "You do not have allowed to like a post!"));
+  }
+
+  if (!commentId) {
+    return next(errorHandler(400, "Comment ID is required"));
+  }
+
+  try {
+    const comment = await Comment.findById(commentId).populate("userId", [
+      "username",
+      "avatar",
+    ]);
+
+    if (!comment) {
+      return next(errorHandler(404, "Comment not found"));
+    }
+
+    const userIndex = comment.likes.indexOf(userId);
+    if (userIndex === -1) {
+      comment.numberOfLikes += 1;
+      comment.likes.push(userId);
+    } else {
+      comment.numberOfLikes -= 1;
+      comment.likes.splice(userIndex, 1);
+    }
+    await comment.save();
+    res.status(200).json({
+      comment,
+      success: true,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

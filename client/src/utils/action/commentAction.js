@@ -23,3 +23,17 @@ export async function createComment(data, postId, userId) {
     return error;
   }
 }
+
+export async function likeComment(commentId) {
+  try {
+    const res = await fetch(`/api/comment/likeComment/${commentId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return await res.json();
+  } catch (error) {
+    return error;
+  }
+}
