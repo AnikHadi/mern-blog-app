@@ -102,7 +102,7 @@ export default function DashUsers() {
                           <TableHead className="uppercase">Delete</TableHead>
                         </TableRow>
                       </TableHeader>
-                      <TableBody>
+                      <TableBody className="divide-y">
                         {allUsers.map((user) => {
                           const createdAt = new Date(
                             user.createdAt

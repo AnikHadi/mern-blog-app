@@ -14,10 +14,15 @@ import { FaHome, FaUsers } from "react-icons/fa";
 import { IoMdLogOut } from "react-icons/io";
 import { LiaCommentSolid } from "react-icons/lia";
 import { useDispatch } from "react-redux";
-import { Link, useLocation } from "react-router";
+import { Link } from "react-router";
 import { toast } from "react-toastify";
 
 const items = [
+  {
+    title: "Dashboard",
+    icon: FaHome,
+    to: "/dashboard?tab=dashboard",
+  },
   {
     title: "Profile",
     icon: CgProfile,
@@ -41,7 +46,6 @@ const items = [
 ];
 export default function DashSidebar({ searchParam, user }) {
   const dispatch = useDispatch();
-  const { pathname, search } = useLocation();
   // Sign Out Handler
   const handleSignOut = async () => {
     const result = await signOutAction();
@@ -66,23 +70,6 @@ export default function DashSidebar({ searchParam, user }) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu className="px-6">
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              className={`cursor-pointer ${
-                pathname === "/dashboard" &&
-                search === "" &&
-                "bg-[#4d4d4db0] hover:bg-[#4d4d4db0] text-white hover:text-white "
-              }`}
-            >
-              <Link
-                to="/dashboard"
-                className="flex items-center gap-2 text-sm w-full  "
-              >
-                <FaHome /> Dashboard
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-
           {linkItems.map((item) => {
             const Icon = item.icon;
             const isActive = searchParam === item.title.toLowerCase();

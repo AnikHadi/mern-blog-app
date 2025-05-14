@@ -5,7 +5,7 @@ function Table({ className, ...props }) {
     // <div data-slot="table-container" className="relative w-full overflow-x-auto">
     <div
       data-slot="table-container"
-      className="table-auto overflow-x-scroll md:mx-auto p-3 rounded-md border scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 "
+      className="table-auto overflow-x-auto md:mx-auto p-3 rounded-md border scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 "
     >
       <table
         data-slot="table"

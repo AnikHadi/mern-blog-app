@@ -1,3 +1,4 @@
+import DashboardComponent from "@/components/DashboardComponent";
 import DashComments from "@/components/DashComments";
 import DashPosts from "@/components/DashPosts";
 import DashProfile from "@/components/DashProfile";
@@ -32,6 +33,7 @@ function Dashboard() {
           {tab === "posts" && <DashPosts />}
           {tab === "comments" && <DashComments />}
           {tab === "users" && <DashUsers />}
+          {tab === "dashboard" && <DashboardComponent />}
         </div>
       </div>
     </SidebarProvider>

@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router";
 import { toast } from "react-toastify";
 import ConfirmDialog from "./ConfirmDialog";
+import ToolTipComponent from "./ToolTipComponent";
 import { Button } from "./ui/button";
 import { Dialog, DialogTrigger } from "./ui/dialog";
 
@@ -143,7 +144,10 @@ export default function DashPosts() {
                             </TableCell>
                             <TableCell className="text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
                               <Link to={`/post/${post.slug}`}>
-                                {post.title}
+                                <ToolTipComponent
+                                  data={post.title}
+                                  length={80}
+                                />
                               </Link>
                             </TableCell>
                             <TableCell className="text-sm font-medium text-gray-900 dark:text-gray-400 whitespace-nowrap">
