@@ -4,8 +4,10 @@ import { errorHandler } from "../utils/error.js";
 export const createComment = async (req, res, next) => {
   const { postId, userId } = req.params;
 
-  if (!req.user.isAdmin || !req.user._id === userId) {
-    return next(errorHandler(403, "You do not have allowed to create a post!"));
+  if (!userId) {
+    return next(
+      errorHandler(403, "You do not have allowed to comment this post!")
+    );
   }
   if (!postId) {
     return next(errorHandler(400, "Post ID is required"));
@@ -152,8 +154,10 @@ export const editComment = async (req, res, next) => {
       return next(errorHandler(404, "Comment not found"));
     }
 
-    if (!req.user.isAdmin || comment.userId.toString() !== userId) {
-      return next(errorHandler(403, "You do not have allowed to edit a post!"));
+    if (comment.userId._id.toString() !== userId && !req.user.isAdmin) {
+      return next(
+        errorHandler(403, "You do not have allowed to edit this comment!")
+      );
     }
 
     const editedComment = await Comment.findByIdAndUpdate(
@@ -186,7 +190,7 @@ export const deleteComment = async (req, res, next) => {
       return next(errorHandler(404, "Comment not found"));
     }
 
-    if (!req.user.isAdmin || comment.userId.toString() !== userId) {
+    if (!req.user.isAdmin && comment.userId.toString() !== userId) {
       return next(errorHandler(403, "You do not have allowed to edit a post!"));
     }
 

@@ -60,6 +60,7 @@ export default function CommentUpdate({
       comment: editedComment,
     };
     const res = await editComment(commentId, data);
+    console.log(res);
     if (res.success) {
       setAllComments((prev) => {
         prev.map((c) => {
@@ -75,6 +76,8 @@ export default function CommentUpdate({
       setIsEditingComment(false);
       setEditedComment("");
     } else {
+      setIsEditingComment(false);
+      toast.error(res.message);
       console.error("Error editing comment:", res.message);
     }
   };
@@ -94,6 +97,7 @@ export default function CommentUpdate({
       });
       setIsDeleting(false);
     } else {
+      setIsDeleting(false);
       console.error("Error deleting comment:", res.message);
     }
   };
@@ -162,7 +166,8 @@ export default function CommentUpdate({
                   : ""}
               </p>
               {currentUser &&
-                (currentUser._id === comment.userId || currentUser.isAdmin) && (
+                (currentUser._id === comment.userId._id ||
+                  currentUser.isAdmin) && (
                   <div className="flex gap-2 text-xs">
                     <button
                       className=" text-gray-500 cursor-pointer hover:underline"

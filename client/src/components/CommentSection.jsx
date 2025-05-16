@@ -63,7 +63,6 @@ export default function CommentSection({ postId }) {
     if (comment.success) {
       setAllComments((prev) => [comment.comment, ...prev]);
       setComments("");
-      console.log(comment);
     } else {
       toast.error(comment.message);
     }
