@@ -120,10 +120,12 @@ export default function Header() {
         </div>
         <div className="flex items-center gap-2">
           <Button className="border-2 border-gray-400 bg-transparent hover:bg-transparent rounded-full cursor-pointer w-12 flex lg:hidden items-center">
-            <IoMdSearch
-              size={30}
-              className="text-gray-800 dark:text-gray-200"
-            />
+            <Link to="/search">
+              <IoMdSearch
+                size={30}
+                className="text-gray-800 dark:text-gray-200"
+              />
+            </Link>
           </Button>
           <div className="flex gap-2 md:order-2">
             <Button

@@ -61,7 +61,7 @@ function Home() {
         >
           View all posts
         </Link>
-        <div className=" p-3 bg-amber-100 dark:bg-slate-700">
+        <div className=" p-3 rounded-md bg-amber-100 dark:bg-slate-700">
           <CallToAction />
         </div>
       </div>
