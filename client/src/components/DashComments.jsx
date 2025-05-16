@@ -28,7 +28,6 @@ export default function DashComments() {
     const fetchAllComment = async () => {
       setIsLoading(true);
       const result = await getAllComment();
-      console.log(result);
       if ("success" in result && result.success) {
         setAllComments(result.comments);
         if (result.totalComments <= 9) {
@@ -170,7 +169,7 @@ export default function DashComments() {
                 </div>
               </div>
               {showMore && (
-                <div className="flex justify-center mt-4">
+                <div className="flex justify-center my-4">
                   <button
                     onClick={handleShowMore}
                     className="bg-blue-500 text-white px-4 py-1.5 rounded-lg hover:bg-blue-600 cursor-pointer"

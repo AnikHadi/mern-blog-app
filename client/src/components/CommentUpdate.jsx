@@ -60,7 +60,6 @@ export default function CommentUpdate({
       comment: editedComment,
     };
     const res = await editComment(commentId, data);
-    console.log(res);
     if (res.success) {
       setAllComments((prev) => {
         prev.map((c) => {

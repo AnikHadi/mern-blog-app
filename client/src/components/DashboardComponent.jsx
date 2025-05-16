@@ -224,9 +224,9 @@ export default function DashboardComponent() {
                   );
                 })
               ) : (
-                <div className="flex justify-center items-center p-3">
+                <span className="flex justify-center items-center p-3">
                   No Users Found
-                </div>
+                </span>
               )}
             </TableBody>
           </Table>
