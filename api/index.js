@@ -3,8 +3,13 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
+import path from "path";
 import api from "./routes/index.js";
+
 dotenv.config();
+
+const __dirname = path.resolve();
+
 const app = express();
 const PORT = process.env.PORT || 5001;
 
@@ -28,48 +33,18 @@ connectMongoDB();
 
 app.use("/api", api);
 
+app.use(express.static(path.join((__dirname, "../client/dist"))));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client", "dist", "index.html"));
+});
+
 app.get("/", (req, res) => {
   res.json({
     message: "Hello, API is running...",
     port: "Blog Server is running on port " + PORT,
   });
 });
-
-// Update an existing post
-
-// app.put("/api/posts/:id", (req, res) => {
-//   const post = posts.find((p) => p.id === parseInt(req.params.id));
-
-//   if (!post) {
-//     return res.status(404).json({ message: "Post not found" });
-//   }
-
-//   const { title, content } = req.body;
-
-//   if (!title || !content) {
-//     return res.status(400).json({ message: "Title and content are required" });
-//   }
-
-//   post.title = title;
-//   post.content = content;
-//   post.updatedAt = new Date();
-
-//   res.json(post);
-// });
-
-// // Delete a post
-
-// app.delete("/api/posts/:id", (req, res) => {
-//   const postIndex = posts.findIndex((p) => p.id === parseInt(req.params.id));
-
-//   if (postIndex === -1) {
-//     return res.status(404).json({ message: "Post not found" });
-//   }
-
-//   posts.splice(postIndex, 1);
-
-//   res.json({ message: "Post deleted successfully" });
-// });
 
 // Middleware to log requests
 
