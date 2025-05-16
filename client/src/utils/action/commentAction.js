@@ -1,8 +1,10 @@
 "use server";
 
-export async function getAllComment() {
+export async function getAllComment(startIndex) {
   try {
-    const res = await fetch("/api/comment/getAllComments");
+    const res = await fetch(
+      `/api/comment/getAllComments?startIndex=${startIndex}`
+    );
     return await res.json();
   } catch (error) {
     return error;

@@ -28,19 +28,18 @@ export default function DashComments() {
     const fetchAllComment = async () => {
       setIsLoading(true);
       const result = await getAllComment();
-      if ("success" in result) {
-        if (result.success) {
-          setAllComments(result.comments);
-          if (result.comments.length < 9) {
-            setShowMore(false);
-          } else {
-            setShowMore(true);
-          }
-          setIsLoading(false);
+      console.log(result);
+      if ("success" in result && result.success) {
+        setAllComments(result.comments);
+        if (result.totalComments <= 9) {
+          setShowMore(false);
         } else {
-          toast.error(result.message);
-          setIsLoading(false);
+          setShowMore(true);
         }
+        setIsLoading(false);
+      } else {
+        toast.error(result.message);
+        setIsLoading(false);
       }
     };
     if (currentUser.isAdmin) {
@@ -54,7 +53,7 @@ export default function DashComments() {
     const comments = await getAllComment(startIndex);
     if (comments.success) {
       setAllComments((prevUser) => [...prevUser, ...comments.comments]);
-      if (comments.comments.length < 2) {
+      if (comments.comments.length <= 9) {
         setShowMore(false);
       } else {
         setShowMore(true);
