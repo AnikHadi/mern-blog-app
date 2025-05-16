@@ -20,7 +20,11 @@ export default function SignIn() {
     if (state?.success) {
       dispatch(signInSuccess(state));
       toast.success(state?.message);
-      navigate("/dashboard?tab=dashboard");
+      if (state.user.isAdmin) {
+        navigate("/dashboard?tab=dashboard");
+      } else {
+        navigate("/dashboard?tab=profile");
+      }
       delete state.success;
     } else {
       dispatch(signInFailure(state));
@@ -61,10 +65,12 @@ export default function SignIn() {
             <PasswordInput name="password" />
             <Button
               disabled={isPending}
-              className="px-2 py-1 border-2 border-indigo-500 bg-white text-gray-900 transition delay-100 duration-300 ease-in-out hover:bg-gradient-to-r hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 hover:text-white rounded-lg  cursor-pointer select-none"
+              className="transition group flex items-center justify-center text-white font-bold rounded-md p-[1.5px] bg-gradient-to-br from-purple-600 to-pink-600 hover:from-pink-600 hover:to-purple-600 cursor-pointer mt-px mr-[1px]"
               type="submit"
             >
-              {isPending && <Spin />} {isPending ? "Login..." : "Sign In"}
+              <span className="flex justify-center items-center w-full h-full rounded-md text-gray-900 dark:text-gray-100 hover:text-gray-100  bg-white dark:bg-[#10172a]  py-[6px] px-3 bg-gradient-to-br hover:from-pink-600 hover:to-purple-600">
+                {isPending && <Spin />} {isPending ? "Login..." : "Sign In"}
+              </span>
             </Button>
           </form>
           <OAuth />
