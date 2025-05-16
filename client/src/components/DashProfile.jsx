@@ -120,19 +120,22 @@ export default function DashProfile() {
           />
         </div>
         <PasswordInput name="password" className="md:max-w-full mt-3" />
-        <Button
-          className="px-2 py-1 border-2 border-indigo-500 bg-white text-gray-900 transition delay-100 duration-300 ease-in-out hover:bg-gradient-to-r hover:from-indigo-500 hover:via-purple-500 hover:to-pink-500 hover:text-white rounded-lg  cursor-pointer select-none mt-4"
+        <button
+          className="transition group flex items-center justify-center text-white font-bold rounded-md p-[1.5px] bg-gradient-to-br from-purple-600 to-pink-600 hover:from-pink-600 hover:to-purple-600 cursor-pointer mt-4 mr-[1px]"
           type="submit"
           disabled={isPending}
         >
-          {isPending && <Spin />} {isPending ? "Updating..." : "Update Profile"}
-        </Button>
+          <span className="flex justify-center items-center w-full h-full rounded-md text-gray-900 dark:text-gray-100 hover:text-gray-100  bg-white dark:bg-[#10172a]  py-[6px] px-3 bg-gradient-to-br hover:from-pink-600 hover:to-purple-600">
+            {isPending && <Spin />}{" "}
+            {isPending ? "Updating..." : "Update Profile"}
+          </span>
+        </button>
       </form>
       {currentUser.isAdmin && (
         <div className="mt-4">
           <Link to="/create-post">
             <Button
-              className="w-full cursor-pointer bg-gradient-to-r from-indigo-500/80 hover:from-indigo-500  via-purple-500/80 hover:via-purple-500 to-pink-500/80 hover:to-pink-500"
+              className="w-full cursor-pointer text-gray-300  bg-gradient-to-br from-violet-900  to-pink-500 hover:from-pink-500 hover:to-violet-900 text-base"
               //
             >
               Create a Post
@@ -144,7 +147,7 @@ export default function DashProfile() {
         <Dialog>
           <DialogTrigger asChild>
             <Button
-              className="cursor-pointer bg-red-600/70 hover:bg-red-600"
+              className="cursor-pointer text-slate-300 bg-red-600/70 hover:bg-red-600"
               disabled={delLoading}
             >
               Delete Account
