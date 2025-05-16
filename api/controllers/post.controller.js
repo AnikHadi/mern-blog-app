@@ -39,7 +39,7 @@ export const createPost = async (req, res, next) => {
 };
 
 export const getPosts = async (req, res, next) => {
-  const { userId, category, slug, postId, searchTerm } = req.query;
+  const { userId, category, slug, postId, search } = req.query;
   const startIndex = parseInt(req.query.startIndex) || 0;
   const limit = parseInt(req.query.limit) || 9;
   const sortDirection = req.query.order === "asc" ? 1 : -1;
@@ -47,13 +47,13 @@ export const getPosts = async (req, res, next) => {
 
   const filter = {
     ...(userId && { user: userId }),
-    ...(category && { category: category }),
+    ...(category && category !== "all" && { category: category }),
     ...(slug && { slug: slug }),
     ...(postId && { _id: postId }),
-    ...(searchTerm && {
+    ...(search && {
       $or: [
-        { title: { $regex: searchTerm, $options: "i" } },
-        { content: { $regex: searchTerm, $options: "i" } },
+        { title: { $regex: search, $options: "i" } },
+        { content: { $regex: search, $options: "i" } },
       ],
     }),
   };

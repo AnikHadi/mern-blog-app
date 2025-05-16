@@ -20,7 +20,7 @@ export default function SignIn() {
     if (state?.success) {
       dispatch(signInSuccess(state));
       toast.success(state?.message);
-      navigate("/dashboard");
+      navigate("/dashboard?tab=dashboard");
       delete state.success;
     } else {
       dispatch(signInFailure(state));

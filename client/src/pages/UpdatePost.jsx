@@ -37,12 +37,10 @@ export default function UpdatePost() {
   useEffect(() => {
     const fetchCategories = async () => {
       const result = await getAllCategories();
-      if ("success" in result) {
-        if (result.success) {
-          setAllCategories(result.categories);
-        } else {
-          toast.error(result.message);
-        }
+      if ("success" in result && result.success) {
+        setAllCategories(result.categories);
+      } else {
+        toast.error(result.message);
       }
     };
     fetchCategories();
@@ -52,20 +50,18 @@ export default function UpdatePost() {
   useEffect(() => {
     const singlePost = async () => {
       const result = await getSinglePost(postId);
-      if ("success" in result) {
-        if (result.success) {
-          const { title, content, image, category } = result.posts[0];
-          setFormData({
-            title,
-            category,
-            image,
-            content,
-          });
-          // setImageFileUrl(image);
-          quill && (quill.root.innerHTML = content);
-        } else {
-          toast.error(result.message);
-        }
+      if ("success" in result && result.success) {
+        const { title, content, image, category } = result.posts[0];
+        setFormData({
+          title,
+          category,
+          image,
+          content,
+        });
+        // setImageFileUrl(image);
+        quill && (quill.root.innerHTML = content);
+      } else {
+        toast.error(result.message);
       }
     };
     singlePost();

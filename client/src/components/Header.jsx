@@ -2,7 +2,7 @@ import { toggleTheme } from "@/redux/theme/themeSlice";
 import { signOut } from "@/redux/user/userSlice";
 import { signOutAction } from "@/utils/action/userAction";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsCloudMoonFill, BsMenuButtonWideFill } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { FaRegUser } from "react-icons/fa";
@@ -10,7 +10,7 @@ import { IoMdLogOut, IoMdSearch } from "react-icons/io";
 import { LuCloudSun } from "react-icons/lu";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { Button } from "./ui/button";
 import {
@@ -28,8 +28,11 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
+  const [searchTerm, setSearchTerm] = useState("");
   const dispatch = useDispatch();
-  const path = useLocation().pathname;
+  const location = useLocation();
+  const path = location.pathname;
+  const navigate = useNavigate();
 
   const link = [
     { name: "Home", path: "/" },
@@ -38,6 +41,22 @@ export default function Header() {
     // { name: "Contact", path: "/contact" },
     // { name: "Dashboard", path: "/dashboard" },
   ];
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTerm = urlParams.get("search");
+    if (searchTerm) {
+      setSearchTerm(searchTerm);
+    }
+  }, [location.search]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("search", searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
 
   // Sign Out Handler
   const handleSignOut = async () => {
@@ -65,28 +84,25 @@ export default function Header() {
           Blog
         </Link>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="w-[160%] relative items-center hidden lg:flex">
-            <Input type="text" placeholder="Search..." />
+            <Input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search..."
+            />
             <Search
               size={16}
               color="#808080"
               strokeWidth={1}
               absoluteStrokeWidth
+              onClick={handleSubmit}
               className="absolute right-3 opacity-50 hover:opacity-70 cursor-pointer"
             />
           </div>
         </form>
-        {/* <select>
-          <option>Select Your Type</option>
-          {link.map((link) => {
-            return (
-              <option key={link.name} value={link.name}>
-                {link.name}
-              </option>
-            );
-          })}
-        </select> */}
+
         <div className="hidden sm:flex items-center">
           {link.map((nav) => {
             return (
